@@ -30,5 +30,10 @@ go.work
 # Local History for Visual Studio Code
 .history/
 
+*.code-workspace
+
 # Built Visual Studio Code Extensions
 *.vsix
+
+# My personalised input for AoC
+**/input.day*
