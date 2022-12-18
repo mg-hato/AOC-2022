@@ -14,6 +14,7 @@ func ReadList(filename string) (*List, error) {
 	// Try to open the file
 	file, e := os.Open(filename)
 	if e != nil {
+		file.Close()
 		return nil, e
 	}
 
@@ -25,6 +26,7 @@ func ReadList(filename string) (*List, error) {
 
 		// If error during reading, return
 		if err := scanner.Err(); err != nil {
+			file.Close()
 			return nil, err
 		}
 
@@ -37,13 +39,16 @@ func ReadList(filename string) (*List, error) {
 			caloryList.separate()
 		default:
 			{
+				// If error occurred during parsing, return
 				if err := caloryList.addCaloryItem(line); err != nil {
+					file.Close()
 					return nil, errors.New(getErrMsg(lineNumber, line, err))
 				}
 			}
 		}
 	}
 
+	file.Close()
 	return &caloryList, nil
 }
 
