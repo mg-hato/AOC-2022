@@ -8,8 +8,8 @@ import (
 	"strconv"
 )
 
-func ReadCaloryList(filename string) (*CaloryList, error) {
-	caloryList := CaloryList{list: make([][]int, 0)}
+func ReadList(filename string) (*List, error) {
+	caloryList := List{calories: make([][]int, 0)}
 
 	// Try to open the file
 	file, e := os.Open(filename)
@@ -51,23 +51,23 @@ func getErrMsg(lineNumber int, line string, e error) string {
 	return fmt.Sprintf("Error occurred reading/parsing line #%d. Line is: \"%s\"\nError is: %v", lineNumber, line, e)
 }
 
-func (caloryList *CaloryList) addCaloryItem(line string) error {
+func (list *List) addCaloryItem(line string) error {
 	item, err := strconv.Atoi(line)
 	if err != nil {
 		return err
 	}
 
-	if len(caloryList.list) == 0 {
-		caloryList.list = append(caloryList.list, []int{})
+	if len(list.calories) == 0 {
+		list.calories = append(list.calories, []int{})
 	}
-	size := len(caloryList.list)
-	caloryList.list[size-1] = append(caloryList.list[size-1], item)
+	size := len(list.calories)
+	list.calories[size-1] = append(list.calories[size-1], item)
 
 	return nil
 }
 
-func (caloryList *CaloryList) separate() {
-	if size := len(caloryList.list); size > 0 && len(caloryList.list[size-1]) > 0 {
-		caloryList.list = append(caloryList.list, []int{})
+func (list *List) separate() {
+	if size := len(list.calories); size > 0 && len(list.calories[size-1]) > 0 {
+		list.calories = append(list.calories, []int{})
 	}
 }

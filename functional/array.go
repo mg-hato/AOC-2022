@@ -196,3 +196,25 @@ func Sum[T number](arr []T) T {
 		arr, 0,
 	)
 }
+
+type Pair[A, B any] struct {
+	First  A
+	Second B
+}
+
+func Zip[A, B any](arrayA []A, arrayB []B) []Pair[A, B] {
+	if arrayA == nil || arrayB == nil {
+		return nil
+	}
+
+	size := len(arrayA)
+	if bsize := len(arrayB); size > bsize {
+		size = bsize
+	}
+
+	var zipped []Pair[A, B] = make([]Pair[A, B], size)
+	for i := 0; i < size; i++ {
+		zipped[i] = Pair[A, B]{arrayA[i], arrayB[i]}
+	}
+	return zipped
+}
