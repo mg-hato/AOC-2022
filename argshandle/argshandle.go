@@ -1,6 +1,7 @@
 package argshandle
 
 import (
+	. "aoc/functional"
 	"fmt"
 	"log"
 	"os"
@@ -34,7 +35,7 @@ func HandleArgumentsAndExecute[IN any, OUT any](
 ) (bool, error) {
 
 	// Starting configuration for the app execution
-	conf := configuration{inputFilename: "", dispalyHelp: false, useSecondSolver: false}
+	conf := configuration{}
 
 	// Options registered
 	supportedArgumentOptions := []argumentOption{
@@ -127,30 +128,25 @@ func getParameterToArgOptionMapping(argOpts []argumentOption) map[string]argumen
 }
 
 func displayHelp(argumentOptions []argumentOption) {
-	optionsToPrint := make([]string, 0)
-	for _, argOpt := range argumentOptions {
-		optionsToPrint = append(optionsToPrint, strings.Join(argOpt.parameters, ", "))
-	}
+	paramsToPrint := Map(func(ao argumentOption) string {
+		return strings.Join(ao.parameters, ", ")
+	}, argumentOptions)
 
-	// find maximum length of the options
-	maxLength := 0
-	for _, otp := range optionsToPrint {
-		if maxLength < len(otp) {
-			maxLength = len(otp)
-		}
-	}
+	// find maximum length among `paramsToPrint`
+	maxLength := len(Maximum(paramsToPrint, func(lhs, rhs string) bool { return len(lhs) < len(rhs) }))
 
 	// padding = distance in ' ' between options & descriptions
-	padding := 5
+	var padding int = 5
 
 	// margin = number of spaces before the first option print
-	margin := 3
-	margin_str := strings.Repeat(" ", margin)
+	var margin int = 3
+	var margin_str string = strings.Repeat(" ", margin)
 
-	// print out help
-	for i, otp := range optionsToPrint {
-		gap := maxLength - len(otp)
-		fmt.Printf("%s%s%s%s\n", margin_str, otp, strings.Repeat(" ", padding+gap), argumentOptions[i].description)
-	}
-
+	ForEach(
+		func(pair Pair[string, argumentOption]) {
+			gap := maxLength - len(pair.First)
+			fmt.Printf("%s%s%s%s\n", margin_str, pair.First, strings.Repeat(" ", padding+gap), pair.Second.description)
+		},
+		Zip(paramsToPrint, argumentOptions),
+	)
 }
