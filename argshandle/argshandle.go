@@ -2,6 +2,7 @@ package argshandle
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 )
@@ -94,11 +95,24 @@ func HandleArgumentsAndExecute[IN any, OUT any](
 	return true, nil
 }
 
-func check(e error, f *os.File) bool {
-	if e != nil {
-		f.Close()
+// `AoC2022DefaultProgram` is usually how a program will be executed
+// for any of the Advent of Code 2022 problems
+func AoC2022DefaultProgram[IN any, OUT any](
+	reader func(string) (IN, error),
+	solver1 func(IN) OUT,
+	solver2 func(IN) OUT,
+) {
+	var channel chan OUT = make(chan OUT, 1)
+	ok, err := HandleArgumentsAndExecute(os.Args, reader, solver1, solver2, channel)
+
+	if err != nil {
+		log.Fatal(err)
 	}
-	return e == nil
+
+	if ok {
+		fmt.Println("Solution received")
+		fmt.Printf("\t%v\n", <-channel)
+	}
 }
 
 // Convert array of `argumentOption` into mapping: (parameter) => argumentOption
