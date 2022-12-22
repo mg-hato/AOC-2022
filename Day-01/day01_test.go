@@ -24,25 +24,6 @@ func TestDay01_TestReader(t *testing.T) {
 
 }
 
-func (lhs List) match(rhs List) bool {
-	if len(lhs.calories) != len(rhs.calories) {
-		return false
-	}
-
-	for i, list := range lhs.calories {
-		if len(list) != len(rhs.calories[i]) {
-			return false
-		}
-
-		for j, v := range list {
-			if v != rhs.calories[i][j] {
-				return false
-			}
-		}
-	}
-	return true
-}
-
 func TestDay01_Solver(t *testing.T) {
 	tests := []struct {
 		input       List
