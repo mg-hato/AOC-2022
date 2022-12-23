@@ -218,3 +218,38 @@ func Zip[A, B any](arrayA []A, arrayB []B) []Pair[A, B] {
 	}
 	return zipped
 }
+
+// Enumerate the array with numbers starting from 0
+func Enumerate[T any](arr []T) []Pair[int, T] {
+	return EnumerateWithFirstIndex(arr, 0)
+}
+
+// Enumerate the array with numbers starting from the specified `firstIndex`
+func EnumerateWithFirstIndex[T any](arr []T, firstIndex int) []Pair[int, T] {
+	var enumerated []Pair[int, T] = make([]Pair[int, T], len(arr))
+	var index int = firstIndex
+	for i := 0; i < len(arr); i++ {
+		enumerated[i] = Pair[int, T]{index, arr[i]}
+		index++
+	}
+	return enumerated
+}
+
+// Group elements of `arr` into a map. Keys and values are defined by extraction functions `keyf` and `valf`, respectively.
+//
+// Key of an element `x` of `arr` is `keyf(x)`
+//
+// Value of an element `x` of `arr` is `valf(x)`
+func GroupBy[T any, K comparable, V any](arr []T, keyf func(T) K, valf func(T) V) map[K][]V {
+	var grouped map[K][]V = make(map[K][]V)
+	for _, element := range arr {
+		key := keyf(element)
+		val := valf(element)
+		if _, keyAlreadyExists := grouped[key]; keyAlreadyExists {
+			grouped[key] = append(grouped[key], val)
+		} else {
+			grouped[key] = []V{val}
+		}
+	}
+	return grouped
+}
