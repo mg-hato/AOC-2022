@@ -2,69 +2,47 @@ package main
 
 import (
 	"aoc/functional"
-	"fmt"
+	"aoc/testers"
 	"testing"
 )
 
-func TestDay01_TestReader(t *testing.T) {
-	expected := map[int]List{
-		1: {calories: [][]int{{10, 20, 30}, {40, 50, 60}, {70}}},
-		2: {calories: [][]int{{12, 12}, {12, 12, 12}}},
-		3: {calories: [][]int{{10}}},
-		4: {calories: [][]int{}},
-	}
-	for k, exp := range expected {
-		filename := fmt.Sprintf("./test/input.%d", k)
-		if readList, _ := ReadList(filename); !readList.equals(exp) {
-			t.Errorf("Test #%d failed: ReadList(\"%s\")", k, filename)
-			t.Errorf("\tReturned: %v", readList)
-			t.Errorf("\tExpected: %v", exp)
-		}
-	}
+func TestDay01_Reader(t *testing.T) {
+	tester := testers.DefaultReaderTester(
+		ReadList,
+		"ReadListOfCalories",
+	)
 
+	tester.ProvideEqualityFunctionForTypeT(areEqual)
+
+	tester.AddGoodInputTests(
+		List{[][]int{{10, 20, 30}, {40, 50, 60}, {70}}},
+		List{[][]int{{12, 12}, {12, 12, 12}}},
+		List{[][]int{{10}}},
+		List{[][]int{}},
+	)
+
+	tester.AddErrorInputTests("Line 6 has number with commas (not accepted)")
+
+	tester.RunBothGoodAndErrorInputTests(t)
 }
 
 func TestDay01_Solver(t *testing.T) {
-	tests := []struct {
-		input       List
-		n, expected int
-	}{
-		{
-			input: List{[][]int{}},
-			n:     10, expected: 0,
-		},
-		{
-			input: List{[][]int{{100}, {40, 50, 60}, {70}}},
-			n:     1, expected: 150,
-		},
-		{
-			input: List{[][]int{{100}, {40, 50, 60}, {70}}},
-			n:     2, expected: 250,
-		},
-		{
-			input: List{[][]int{{100}, {40, 50, 60}, {70}}},
-			n:     3, expected: 320,
-		},
-		{
-			// sums => 1, 9, 5, 6, 7, 17, 10
-			// top 4 sums => 17, 10, 9, 7
-			input: List{[][]int{{1}, {2, 3, 4}, {5}, {6}, {7}, {8, 9}, {10}}},
-			n:     4, expected: 43,
-		},
-	}
+	tester := testers.DefaultSolverTesterForComparableTypeR(
+		func(list List) int { return GetTotalCaloriesSumOfTopN(list, 1) },
+		func(list List) int { return GetTotalCaloriesSumOfTopN(list, 3) },
+		"GetSumOfTop1",
+		"GetSumOfTop3",
+	)
 
-	for tn, test := range tests {
-		if result := GetTotalCaloriesSumOfTopN(&test.input, test.n); result != test.expected {
-			t.Errorf("Test #%d failed: GetTotalCaloriesSumOfTOpN(%v, %d)", tn+1, test.input, test.n)
-			t.Errorf("\tReturned: %d", result)
-			t.Errorf("\tExpected: %d", test.expected)
+	tester.AddTest(List{[][]int{{1}, {2}, {3}}}, 3, 6)
+	tester.AddTest(List{[][]int{{1, 2, 3, 4}, {81}, {5, 5, 5}, {71}}}, 81, 167)
+	tester.AddTest(List{[][]int{{1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}}}, 1, 3)
+	tester.AddTest(List{[][]int{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 1, 1}}}, 3, 9)
 
-		}
-	}
+	tester.RunBothSolversTests(t)
 }
 
-// Tests whether to List structs are equal
-func (lhs List) equals(rhs List) bool {
+func areEqual(lhs, rhs List) bool {
 	size := len(lhs.calories)
 	if size != len(rhs.calories) {
 		return false

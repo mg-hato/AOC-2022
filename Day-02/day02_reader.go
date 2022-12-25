@@ -5,104 +5,71 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"strings"
+	"regexp"
 )
 
-func ReadStrategy(filename string) (*EncryptedStrategyGuide, error) {
+func ReadStrategy(filename string) (EncryptedStrategyGuide, error) {
+	strategy := EncryptedStrategyGuide{rounds: []Round{}}
 	file, e := os.Open(filename)
 
 	// Try to open the file
 	if e != nil {
-		file.Close()
-		return nil, e
+		return strategy, e
 	}
+
+	// A line is described with opponent's move (A, B or C) and my move (X, Y or Z)
+	round_regexp := regexp.MustCompile("^([ABC]) ([XYZ])$")
+
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
 
-	strategy := EncryptedStrategyGuide{rounds: []Round{}}
-
-	var lineNumber int = 0
+	var line_number int
 	for scanner.Scan() {
-		lineNumber++
+		line_number++
 
-		// If error reading the line, return
-		if e := scanner.Err(); e != nil {
-			file.Close()
-			return nil, e
+		if !round_regexp.MatchString(scanner.Text()) {
+			return strategy, error_BadInputLine(scanner.Text(), line_number)
 		}
 
-		round, e := parseRound(strings.Split(scanner.Text(), " "))
-
-		// If error during parsing the line, return
-		if e != nil {
-			file.Close()
-			msg := fmt.Sprintf("Error while reading line #%d.\n\tError: %v", lineNumber, e)
-			return nil, errors.New(msg)
-		}
-
+		round := parseRound(round_regexp.FindStringSubmatch(scanner.Text())[1:])
 		strategy.rounds = append(strategy.rounds, round)
 	}
 
-	file.Close()
-	return &strategy, nil
+	return strategy, nil
 }
 
-// Parse a round of the provided strategy
-func parseRound(roundDescription []string) (Round, error) {
-	var round Round = Round{}
-	if len(roundDescription) != 2 {
-		msg := fmt.Sprintf("A round is expected to have exactly two shapes, but %d were given: %v", len(roundDescription), roundDescription)
-		return round, errors.New(msg)
-	}
-
-	abc, e := parseABC(roundDescription[0])
-	if e != nil {
-		return round, e
-	}
-
-	xyz, e := parseXYZ(roundDescription[1])
-	if e != nil {
-		return round, e
-	}
-
-	round.opponent = abc
-	round.me = xyz
-	return round, nil
+// Parse one round of the given strategy guide
+func parseRound(round_as_strings []string) Round {
+	return Round{parseABC(round_as_strings[0]), parseXYZ(round_as_strings[1])}
 }
 
 // Parse 1-letter string as A, B or C
-func parseABC(str string) (ABC, error) {
+func parseABC(str string) ABC {
 	switch str {
 	case "A":
-		return A, nil
+		return A
 	case "B":
-		return B, nil
-	case "C":
-		return C, nil
+		return B
 	default:
-		{
-			var null ABC
-			msg := fmt.Sprintf("Unexpected ABC description. Expected \"A\", \"B\" or \"C\", but received: \"%s\"", str)
-			return null, errors.New(msg)
-		}
+		return C
 	}
 }
 
 // Parse 1-letter string as X, Y or Z
-func parseXYZ(str string) (XYZ, error) {
+func parseXYZ(str string) XYZ {
 	switch str {
 	case "X":
-		return X, nil
+		return X
 	case "Y":
-		return Y, nil
-	case "Z":
-		return Z, nil
+		return Y
 	default:
-		{
-			var null XYZ
-			msg := fmt.Sprintf("Unexpected XYZ description. Expected \"X\", \"Y\" or \"Z\", but received: \"%s\"", str)
-			return null, errors.New(msg)
-		}
+		return Z
 	}
+}
+
+func error_BadInputLine(line string, line_number int) error {
+	message := fmt.Sprintf("Bad line of input describing one round on line %d. Line is: \"%s\"", line_number, line)
+	return errors.New(message)
 }
