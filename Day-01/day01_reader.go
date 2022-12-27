@@ -5,70 +5,59 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 )
 
-func ReadList(filename string) (*List, error) {
+func ReadList(filename string) (List, error) {
 	caloryList := List{calories: make([][]int, 0)}
 
 	// Try to open the file
 	file, e := os.Open(filename)
 	if e != nil {
-		file.Close()
-		return nil, e
+		return caloryList, e
 	}
+
+	defer file.Close()
+
+	// Regular expression for the empty-line
+	empty_line_regexp := regexp.MustCompile("^ *$")
+
+	// Regular expression for a line that contains a non-negative number
+	number_line_regexp := regexp.MustCompile("^\\d+$")
 
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
 
-	var lineNumber int = 0
+	var line_number int = 0
 	for scanner.Scan() {
 
-		// If error during reading, return
-		if err := scanner.Err(); err != nil {
-			file.Close()
-			return nil, err
-		}
+		line_number++
 
-		lineNumber++
-		line := scanner.Text()
-
-		// On empty line, separate; on non-empty parse the caloric value
-		switch line {
-		case "":
+		if empty_line_regexp.MatchString(scanner.Text()) {
 			caloryList.separate()
-		default:
-			{
-				// If error occurred during parsing, return
-				if err := caloryList.addCaloryItem(line); err != nil {
-					file.Close()
-					return nil, errors.New(getErrMsg(lineNumber, line, err))
-				}
-			}
+		} else if number_line_regexp.MatchString(scanner.Text()) {
+			item, _ := strconv.Atoi(scanner.Text())
+			caloryList.addCaloryItem(item)
+		} else {
+			return caloryList, error_BadInputLine(line_number, scanner.Text())
 		}
 	}
 
-	file.Close()
-	return &caloryList, nil
+	return caloryList, nil
 }
 
-func getErrMsg(lineNumber int, line string, e error) string {
-	return fmt.Sprintf("Error occurred reading/parsing line #%d. Line is: \"%s\"\nError is: %v", lineNumber, line, e)
+func error_BadInputLine(line_number int, line string) error {
+	message := fmt.Sprintf("Bad line of input on line %d. Line is: \"%s\"", line_number, line)
+	return errors.New(message)
 }
 
-func (list *List) addCaloryItem(line string) error {
-	item, err := strconv.Atoi(line)
-	if err != nil {
-		return err
-	}
-
+func (list *List) addCaloryItem(item int) {
 	if len(list.calories) == 0 {
 		list.calories = append(list.calories, []int{})
 	}
 	size := len(list.calories)
 	list.calories[size-1] = append(list.calories[size-1], item)
-
-	return nil
 }
 
 func (list *List) separate() {

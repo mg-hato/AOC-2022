@@ -5,12 +5,12 @@ import (
 )
 
 // Finds the sum of character-priorities that are fetched by `runesFetcher`
-func SumOfPriorities(lc *ListOfContents, runesFetcher func(*ListOfContents) []rune) int {
+func SumOfPriorities(lc ListOfContents, runesFetcher func(ListOfContents) []rune) int {
 	return Sum(Map(PriorityOf, runesFetcher(lc)))
 }
 
 // Find runes that are repeated in both compartments (part 1 of day 03)
-func FindRepeatedItems(lc *ListOfContents) []rune {
+func FindRepeatedItems(lc ListOfContents) []rune {
 	return Map(
 		func(r Rucksack) rune {
 			firstCompartment := AssociateWith(
@@ -27,7 +27,7 @@ func FindRepeatedItems(lc *ListOfContents) []rune {
 }
 
 // Find badges of groups
-func FindGroupBadges(lc *ListOfContents) []rune {
+func FindGroupBadges(lc ListOfContents) []rune {
 
 	// Turn array of rucksacks into array of 3-rucksack groups
 	groups := GetValues(GroupBy(

@@ -2,7 +2,7 @@ package main
 
 import (
 	. "aoc/functional"
-	"fmt"
+	"aoc/testers"
 	"testing"
 )
 
@@ -16,119 +16,67 @@ func loc(rucksacks ...string) ListOfContents {
 }
 
 func TestDay03_Reader(t *testing.T) {
-	tests := map[int]ListOfContents{
-		1: loc("abcdef", "xyzw", "okok", "ab", "cd", "ef"),
-		2: loc("aaaa", "pqrsaa", "ppqqppqq"),
-		3: loc(),
-	}
-
-	for k, expected := range tests {
-		filename := fmt.Sprintf("./test/input.%d", k)
-		if result, _ := ReadListOfContents(filename); !result.equals(expected) {
-			t.Errorf("Test #%d failed: ReadListOfContents(\"%s\")", k, filename)
-			t.Errorf("Returned: %v", result)
-			t.Errorf("Expected: %v", expected)
-		}
-	}
+	tester := testers.DefaultReaderTester(ReadListOfContents, "ReadListOfContents")
+	tester.ProvideEqualityFunctionForTypeT(func(lhs, rhs ListOfContents) bool {
+		return ArrayEqual(lhs.rucksacks, rhs.rucksacks)
+	})
+	tester.AddGoodInputTests(
+		loc("abcdef", "xyzw", "okok", "ab", "cd", "ef"),
+		loc("aaaa", "pqrsaa", "ppqqppqq"),
+		loc(),
+	)
+	tester.AddErrorInputTests(
+		"There is an odd number of items on line 3 (number of items must be even)",
+		"Line 3 has numbers, but only a-z and A-Z are allowed",
+		"There are 4 rucksacks given, hence they cannot be split into groups of (exactly) three",
+	)
+	tester.RunBothGoodAndErrorInputTests(t)
 }
 
-func (lhs ListOfContents) equals(rhs ListOfContents) bool {
-	return ArrayEqual(lhs.rucksacks, rhs.rucksacks)
-}
+func TestDay03_Solver(t *testing.T) {
+	tester := testers.DefaultSolverTesterForComparableTypeR(
+		func(list ListOfContents) int { return SumOfPriorities(list, FindRepeatedItems) },
+		func(list ListOfContents) int { return SumOfPriorities(list, FindGroupBadges) },
+		"SumOfPrioritiesOfRepeatedItems",
+		"SumOfPrioritiesOfGroupBadges",
+	)
 
-func TestDay03_ReaderErrors(t *testing.T) {
-	bad_inputs := map[int]string{
-		1: "There is an odd number of items on line 3 (number of items must be even)",
-		2: "Line 3 has numbers, but only a-z and A-Z are allowed",
-		3: "There are 4 rucksacks given, hence they cannot be split into groups of (exactly) three",
-	}
+	// Example input given in the problem statement
+	tester.AddTest(
+		loc(
+			"vJrwpWtwJgWrhcsFMMfFFhFp",
+			"jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+			"PmmdzqPrVvPwwTWBwg",
+			"wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
+			"ttgJtRGJQctTZtZT",
+			"CrZsJsPPZsGzwwsLwLmpwMDw",
+		), 157, 70,
+	)
 
-	for number, reason := range bad_inputs {
-		filename := fmt.Sprintf("./test/bad-input.%d", number)
-		_, err := ReadListOfContents(filename)
-		if err == nil {
-			t.Errorf("Bad inputs test #%d failed. No error was returned when reading the file: \"%s\"", number, filename)
-			t.Errorf("The input was bad because: %s", reason)
-		}
-	}
+	// Custom input #1
+	// Common items: x, P, j (24, 42, 10)
+	// Badges: B (28)
+	tester.AddTest(
+		loc(
+			"xyzBZXYx",     // xyz + B
+			"PQRSTBpppsPs", // pqrst + B
+			"ijkBjI",       // ijk + B
+		), 76, 28,
+	)
 
-}
+	// Custom input #2
+	// Common items: A, f, H, k, O, q (27, 6, 34, 11, 41, 17)
+	// Badges: W, z (49, 26)
+	tester.AddTest(
+		loc(
+			"abcWbABBBAaB",   // abc + W
+			"defdefDEfDEW",   // def + W
+			"gHWGHi",         // ghi + W
+			"jkzk",           // jk + z
+			"mopnlzOOLLLLLL", // lmnop + z
+			"rstquvqqqqqz",   // qrstuv + z
+		), 136, 75,
+	)
 
-func TestDay03_SolverPart1(t *testing.T) {
-
-	// Recall: a-z is of priority 1-26 and A-Z of 27-52
-	tests := []struct {
-		input    ListOfContents
-		expected int
-	}{
-		{loc(), 0},
-		{
-			// Example input given in the problem statement
-			loc(
-				"vJrwpWtwJgWrhcsFMMfFFhFp",
-				"jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
-				"PmmdzqPrVvPwwTWBwg",
-				"wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
-				"ttgJtRGJQctTZtZT",
-				"CrZsJsPPZsGzwwsLwLmpwMDw",
-			),
-			157,
-		},
-		{
-			loc(
-				"creaTeCRATES", // create | CRATES; T => 20 + 26 = 46
-				"thirdLOVEr",   // third | LOVEr; r => 18
-				"cookBOoK",     // cook | BOoK; o => 15
-				"TeSTrest",     // TeST | rest; e => 5
-			),
-			46 + 18 + 15 + 5,
-		},
-		{loc("LONGWORDhaRdtest"), 44}, // LONGWORD | haRdtest; R => 18 + 26 = 44
-	}
-
-	for tn, test := range tests {
-		if result := SumOfPriorities(&test.input, FindRepeatedItems); result != test.expected {
-			t.Errorf("Test #%d failed: SumOfPriorities(%s)", tn+1, test.input)
-			t.Errorf("Returned: %d", result)
-			t.Errorf("Expected: %d", test.expected)
-		}
-	}
-}
-
-func TestDay03_SolverPart2(t *testing.T) {
-
-	// Recall: a-z is of priority 1-26 and A-Z of 27-52
-	tests := []struct {
-		input    ListOfContents
-		expected int
-	}{
-		{loc(), 0},
-		{
-			// Example input given in the problem statement
-			loc(
-				"vJrwpWtwJgWrhcsFMMfFFhFp",
-				"jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
-				"PmmdzqPrVvPwwTWBwg",
-				"wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
-				"ttgJtRGJQctTZtZT",
-				"CrZsJsPPZsGzwwsLwLmpwMDw",
-			),
-			70,
-		},
-		{
-			loc(
-				"AbcBccaRbbAaab", "defDDRfFeeeE", "XxxyYYxyZzRyzyZyyZZX", // Group badge: R => 18 + 26 = 44
-				"pAbcBccabbAaab", "defDDfFeepeE", "XxpxyYYxyZzyzyZyyZZX", // Group badge: p => 16
-			),
-			44 + 16,
-		},
-	}
-
-	for tn, test := range tests {
-		if result := SumOfPriorities(&test.input, FindGroupBadges); result != test.expected {
-			t.Errorf("Test #%d failed: SumOfPriorities(%s)", tn+1, test.input)
-			t.Errorf("Returned: %d", result)
-			t.Errorf("Expected: %d", test.expected)
-		}
-	}
+	tester.RunBothSolversTests(t)
 }
