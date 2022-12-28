@@ -253,3 +253,16 @@ func GroupBy[T any, K comparable, V any](arr []T, keyf func(T) K, valf func(T) V
 	}
 	return grouped
 }
+
+// Return a reversed version of the array `arr`
+func Reverse[T any](arr []T) []T {
+	var reversed []T = make([]T, len(arr))
+	var j int = len(arr)
+
+	// INVARIANT: i + j = len(arr)
+	for i := 0; i < len(arr); i++ {
+		j--
+		reversed[j] = arr[i]
+	}
+	return reversed
+}
