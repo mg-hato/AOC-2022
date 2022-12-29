@@ -186,6 +186,25 @@ func ArrayEqual[T comparable](lhs []T, rhs []T) bool {
 	return true
 }
 
+// Checks whether the two array have the same elements in the same order
+//
+// The elements are compared for equality with a provided `equality_func`
+func ArrayEqualWith[T any](equality_func func(T, T) bool) func([]T, []T) bool {
+	return func(lhs, rhs []T) bool {
+		var size int
+		if size = len(lhs); size != len(rhs) {
+			return false
+		}
+
+		for i := 0; i < size; i++ {
+			if !equality_func(lhs[i], rhs[i]) {
+				return false
+			}
+		}
+		return true
+	}
+}
+
 type number interface {
 	int | int8 | int16 | int32 | int64 | float32 | float64 | uint | uint8 | uint16 | uint32 | uint64
 }
