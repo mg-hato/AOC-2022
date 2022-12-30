@@ -13,6 +13,10 @@
 			"path": "testers"
 		},
 		{
+			"name": "reading",
+			"path": "reading"
+		},
+		{
 			"name": "01",
 			"path": "01"
 		},
