@@ -5,9 +5,11 @@ import (
 	"os"
 )
 
-func ReadInputFuncWithReader[T any](reader ReaderAoC2022[T]) func(string) (T, error) {
+func ReadWith[T any](
+	reader_supplier func() ReaderAoC2022[T],
+) func(string) (T, error) {
 	return func(filename string) (T, error) {
-
+		reader := reader_supplier()
 		// Try to open the file
 		file, err := os.Open(filename)
 		if err != nil {

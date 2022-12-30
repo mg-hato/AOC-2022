@@ -76,6 +76,12 @@ func (tester *ReaderTester[T]) ProvideEqualityFunctionForTypeT(equality_func fun
 // Run good-input tests
 func (tester *ReaderTester[T]) RunGoodInputTests(t *testing.T) {
 	for test_number, expected_value := range tester.good_tests {
+
+		if tester.equals == nil {
+			t.Errorf("Error: Equality function for T-type not defined")
+			return
+		}
+
 		filename := fmt.Sprintf(tester.good_file_pattern, test_number)
 		result, err := tester.reader(filename)
 
