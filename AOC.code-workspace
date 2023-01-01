@@ -13,6 +13,10 @@
 			"path": "testers"
 		},
 		{
+			"name": "reading",
+			"path": "reading"
+		},
+		{
 			"name": "01",
 			"path": "01"
 		},
@@ -35,6 +39,14 @@
 		{
 			"name": "06",
 			"path": "06"
+		},
+		{
+			"name": "07",
+			"path": "07"
+		},
+		{
+			"name": "08",
+			"path": "08"
 		}
 	]
 }
