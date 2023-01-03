@@ -38,6 +38,10 @@ func DefaultSolverTester[T any, R any](solver_1, solver_2 func(T) R, solver_1_na
 	}
 }
 
+func (solver *SolverTester[T, R]) ProvideEqualityFunctionForTypeR(equality_func func(R, R) bool) {
+	solver.equals = equality_func
+}
+
 // Default Solver tester with some predefined values.
 // The equality-function for result-type R comes out of the box.
 func DefaultSolverTesterForComparableTypeR[T any, R comparable](solver_1, solver_2 func(T) R, solver_1_name, solver_2_name string) SolverTester[T, R] {
