@@ -379,3 +379,14 @@ func Reverse[T any](arr []T) []T {
 	}
 	return reversed
 }
+
+// Constant function that returns `r`
+func Const[T, R any](r R) func(T) R {
+	return func(_ T) R { return r }
+}
+
+// Constant function that returns zero-value of type R
+func ConstZero[T, R any](_ T) R {
+	var r R
+	return r
+}
