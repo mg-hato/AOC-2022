@@ -35,8 +35,8 @@ func TestDay03_Reader(t *testing.T) {
 
 func TestDay03_Solver(t *testing.T) {
 	tester := testers.DefaultSolverTesterForComparableTypeR(
-		func(list ListOfContents) int { return SumOfPriorities(list, FindRepeatedItems) },
-		func(list ListOfContents) int { return SumOfPriorities(list, FindGroupBadges) },
+		func(list ListOfContents) (int, error) { return SumOfPriorities(list, FindRepeatedItems) },
+		func(list ListOfContents) (int, error) { return SumOfPriorities(list, FindGroupBadges) },
 		"SumOfPrioritiesOfRepeatedItems",
 		"SumOfPrioritiesOfGroupBadges",
 	)

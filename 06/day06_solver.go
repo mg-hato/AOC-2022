@@ -2,8 +2,8 @@ package main
 
 import . "aoc/functional"
 
-func FindFirstSequenceOfDifferent(n int) func(string) int {
-	return func(datastream string) int {
+func FindFirstSequenceOfDifferent(n int) func(string) (int, error) {
+	return func(datastream string) (int, error) {
 
 		// Process first n
 		fc := FrequencyCounter{make(map[byte]int), 0}
@@ -13,7 +13,7 @@ func FindFirstSequenceOfDifferent(n int) func(string) int {
 		for {
 			// If frequency-counter detects n different elements, return i
 			if fc.different == n {
-				return i
+				return i, nil
 			}
 
 			// If i still within length of datastream, continue processing, otherwise return -1
@@ -22,7 +22,7 @@ func FindFirstSequenceOfDifferent(n int) func(string) int {
 				fc.AddElement(datastream[i])
 				i++
 			} else {
-				return -1
+				return -1, nil
 			}
 		}
 	}

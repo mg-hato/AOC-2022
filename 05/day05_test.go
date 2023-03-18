@@ -50,8 +50,8 @@ func equalsForRPlan(lhs, rhs RearrangementPlan) bool {
 
 func TestDay05_Solver(t *testing.T) {
 	tester := testers.DefaultSolverTesterForComparableTypeR(
-		func(plan RearrangementPlan) string { return FollowPlan(plan, CrateMover9000{}) },
-		func(plan RearrangementPlan) string { return FollowPlan(plan, CrateMover9001{}) },
+		func(plan RearrangementPlan) (string, error) { return FollowPlan(plan, CrateMover9000{}) },
+		func(plan RearrangementPlan) (string, error) { return FollowPlan(plan, CrateMover9001{}) },
 		"FollowPlanWithCrateMover9000", "FollowPlanWithCrateMover9001",
 	)
 

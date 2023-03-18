@@ -13,8 +13,8 @@ func TestArgsHandle_WhenReaderSuccessfullyReads_CheckThatSolverIsCalled(t *testi
 
 	// Mocked solver
 	var expectedOutcome string = "Solver is called"
-	solver := func(_ string) string {
-		return expectedOutcome
+	solver := func(_ string) (string, error) {
+		return expectedOutcome, nil
 	}
 
 	// Buffered channel of size 1
@@ -47,8 +47,8 @@ func TestArgsHandle_WhenReaderUnsuccessful_ExpectNoSolution(t *testing.T) {
 
 	// Mocked solver
 	var solverSolution string = "Solver is called"
-	solver := func(_ string) string {
-		return solverSolution
+	solver := func(_ string) (string, error) {
+		return solverSolution, nil
 	}
 
 	// Buffered channel of size 1
@@ -86,14 +86,50 @@ func TestArgsHandle_WhenReaderUnsuccessful_ExpectNoSolution(t *testing.T) {
 	}
 }
 
+func TestArgsHandle_WhenSolverReturnsAnError_SolutionIsNotPassedOverChannel(t *testing.T) {
+
+	some_error_message := "Some error occurred"
+	// Mocked solvers that return an error
+	solver := func(_ string) (int, error) {
+		return 0, errors.New(some_error_message)
+	}
+
+	// Mocked command-line arguments
+	arguments1 := []string{"program_name", "--i", "some-input"}
+
+	// Mocked reader. Returns successfully
+	reader := func(_ string) (string, error) {
+		return "", nil
+	}
+
+	// Buffered channel of size 1
+	channel := make(chan int, 1)
+
+	isSolutionPassed, e := HandleArgumentsAndExecute(arguments1, reader, solver, solver, channel)
+
+	if isSolutionPassed {
+		t.Error("The boolean flag \"isSolutionPassed\" was expected to be false")
+	}
+
+	if e.Error() != some_error_message {
+		t.Error("Error message was not the one expected")
+		t.Errorf("Actual: %s", e.Error())
+		t.Errorf("Expected: %s", some_error_message)
+	}
+
+	if len(channel) != 0 {
+		t.Errorf("The channel was expected to receive no messages, but %d messages were received", len(channel))
+	}
+}
+
 func TestArgsHandle_CheckThatCorrectSolverIsCalled(t *testing.T) {
 
 	// Mocked solvers
-	solver1 := func(_ string) int {
-		return 1
+	solver1 := func(_ string) (int, error) {
+		return 1, nil
 	}
-	solver2 := func(_ string) int {
-		return 2
+	solver2 := func(_ string) (int, error) {
+		return 2, nil
 	}
 
 	// Buffered channel of size 1
@@ -178,16 +214,16 @@ func TestArgsHandle_TestWholePipeline(t *testing.T) {
 }
 
 // Returns the sum of all numbers
-func sumSolver(numbers []int) int {
+func sumSolver(numbers []int) (int, error) {
 	var sum int = 0
 	for _, x := range numbers {
 		sum += x
 	}
-	return sum
+	return sum, nil
 }
 
 // Returns the largest number, if no numbers, returns -1
-func maxSolver(numbers []int) int {
+func maxSolver(numbers []int) (int, error) {
 	var max int = -1
 	var max_set bool = false
 	for _, x := range numbers {
@@ -196,7 +232,7 @@ func maxSolver(numbers []int) int {
 			max = x
 		}
 	}
-	return max
+	return max, nil
 }
 
 // Dummy reader. Does not read anything, it only returns the fixed array of numbers

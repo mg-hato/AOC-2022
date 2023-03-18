@@ -3,8 +3,8 @@ package main
 import . "aoc/functional"
 
 // Returns the number of assignment-pairs that satisfy the passed predicate
-func CountAssignmentPairsThatSatisfy(predicate func(AssignmentPair) bool, pairs []AssignmentPair) int {
-	return len(Filter(predicate, pairs))
+func CountAssignmentPairsThatSatisfy(predicate func(AssignmentPair) bool, pairs []AssignmentPair) (int, error) {
+	return len(Filter(predicate, pairs)), nil
 }
 
 // Return true iff

@@ -5,33 +5,33 @@ import (
 	"sort"
 )
 
-func ForFilesystemGet(f func(*Directory, map[*Directory]int64) int64) func([]Command) int64 {
-	return func(commands []Command) int64 {
+func ForFilesystemGet(f func(*Directory, map[*Directory]int64) (int64, error)) func([]Command) (int64, error) {
+	return func(commands []Command) (int64, error) {
 		root := createFileSystem(commands)
 		return f(root, getFileSizes(root))
 	}
 }
 
 // Sums up directories whose sizes are <= 100K
-func SumOfDirectoriesLte100k(root *Directory, sizes map[*Directory]int64) int64 {
-	return Sum(Filter(func(i int64) bool { return i <= 100_000 }, GetValues(sizes)))
+func SumOfDirectoriesLte100k(root *Directory, sizes map[*Directory]int64) (int64, error) {
+	return Sum(Filter(func(i int64) bool { return i <= 100_000 }, GetValues(sizes))), nil
 }
 
 // Finds size of the smallest update-enabling directory (i.e. directory whose deletion would free up enough space for the update)
-func SmallestUpdateEnablingDirectorySize(root *Directory, sizes map[*Directory]int64) int64 {
+func SmallestUpdateEnablingDirectorySize(root *Directory, sizes map[*Directory]int64) (int64, error) {
 	// The amount of memory that needs to be freed up
 	var missing_space int64 = sizes[root] - 40_000_000
 
 	// If there is enough space, we do not need to delete anything
 	if missing_space <= 0 {
-		return 0
+		return 0, nil
 	}
 
 	candidate_sizes := Filter(func(i int64) bool { return i >= missing_space }, GetValues(sizes))
 	sort.Slice(candidate_sizes, func(i, j int) bool {
 		return candidate_sizes[i] < candidate_sizes[j]
 	})
-	return append(candidate_sizes, 0)[0]
+	return append(candidate_sizes, 0)[0], nil
 }
 
 func getFileSizes(root *Directory) map[*Directory]int64 {

@@ -42,8 +42,8 @@ func TestDay02_Solver(t *testing.T) {
 	// A reminder of scoring: Shapes[R -> 1, P -> 2, S -> 3] & Outcome[W -> 6, Draw -> 3, L -> 0]
 
 	tester := testers.DefaultSolverTesterForComparableTypeR(
-		func(esg EncryptedStrategyGuide) int { return CalculateScore(esg, DirectlyAsShape) },
-		func(esg EncryptedStrategyGuide) int { return CalculateScore(esg, AsDesiredOutcome) },
+		func(esg EncryptedStrategyGuide) (int, error) { return CalculateScore(esg, DirectlyAsShape) },
+		func(esg EncryptedStrategyGuide) (int, error) { return CalculateScore(esg, AsDesiredOutcome) },
 		"CalculateScore_XYZ_IsAShape",
 		"CalculateScore_XYZ_IsDesiredOutcome",
 	)
