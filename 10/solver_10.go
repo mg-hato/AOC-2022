@@ -1,6 +1,6 @@
 package main
 
-func SignalStrengths(instructions []Instruction) Result {
+func SignalStrengths(instructions []Instruction) (Result, error) {
 	reg := 1
 	cycle := 0
 	cycles_of_interest := []int{20, 60, 100, 140, 180, 220}
@@ -18,10 +18,10 @@ func SignalStrengths(instructions []Instruction) Result {
 			i++
 		}
 	}
-	return ResultInt{result: acc}
+	return ResultInt{result: acc}, nil
 }
 
-func DrawCRT(instructions []Instruction) Result {
+func DrawCRT(instructions []Instruction) (Result, error) {
 	reg := 1
 	cycle := 0
 	i := 0
@@ -52,5 +52,5 @@ func DrawCRT(instructions []Instruction) Result {
 		}
 	}
 
-	return ResultCRT{crt: string(crt)}
+	return ResultCRT{crt: string(crt)}, nil
 }

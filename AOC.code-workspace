@@ -5,6 +5,10 @@
 			"path": "argshandle"
 		},
 		{
+			"path": "envelope",
+			"name": "envelope",
+		},
+		{
 			"name": "functional",
 			"path": "functional"
 		},

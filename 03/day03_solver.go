@@ -5,8 +5,8 @@ import (
 )
 
 // Finds the sum of character-priorities that are fetched by `runesFetcher`
-func SumOfPriorities(lc ListOfContents, runesFetcher func(ListOfContents) []rune) int {
-	return Sum(Map(PriorityOf, runesFetcher(lc)))
+func SumOfPriorities(lc ListOfContents, runesFetcher func(ListOfContents) []rune) (int, error) {
+	return Sum(Map(PriorityOf, runesFetcher(lc))), nil
 }
 
 // Find runes that are repeated in both compartments (part 1 of day 03)

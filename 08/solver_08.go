@@ -2,8 +2,8 @@ package main
 
 import . "aoc/functional"
 
-func AnalyseForestWith(getForestAnalyser func() ForestAnalyser) func([][]byte) int {
-	return func(heights [][]byte) int {
+func AnalyseForestWith(getForestAnalyser func() ForestAnalyser) func([][]byte) (int, error) {
+	return func(heights [][]byte) (int, error) {
 		// "Trees" (i.e. heights with unique ids)
 		trees := createForest(heights)
 
@@ -15,7 +15,7 @@ func AnalyseForestWith(getForestAnalyser func() ForestAnalyser) func([][]byte) i
 		ForEach(forest_analyser.AnalyseForestRow, transpose(trees))
 		ForEach(forest_analyser.AnalyseForestRow, Map(Reverse[Tree], transpose(trees)))
 
-		return forest_analyser.GetResult()
+		return forest_analyser.GetResult(), nil
 	}
 }
 

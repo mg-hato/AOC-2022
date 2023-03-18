@@ -29,8 +29,8 @@ type argumentOption struct {
 func HandleArgumentsAndExecute[IN any, OUT any](
 	arguments []string,
 	readInput func(string) (IN, error),
-	solver1 func(IN) OUT,
-	solver2 func(IN) OUT,
+	solver1 func(IN) (OUT, error),
+	solver2 func(IN) (OUT, error),
 	outputChannel chan OUT,
 ) (bool, error) {
 
@@ -90,7 +90,12 @@ func HandleArgumentsAndExecute[IN any, OUT any](
 		selectedSolver = solver2
 	}
 
-	outputChannel <- selectedSolver(input)
+	solution, e := selectedSolver(input)
+	if e != nil {
+		return false, e
+	}
+
+	outputChannel <- solution
 
 	// return true to indicate that solution has been sent over a channel
 	return true, nil
@@ -100,8 +105,8 @@ func HandleArgumentsAndExecute[IN any, OUT any](
 // for any of the Advent of Code 2022 problems
 func AoC2022DefaultProgram[IN any, OUT any](
 	reader func(string) (IN, error),
-	solver1 func(IN) OUT,
-	solver2 func(IN) OUT,
+	solver1 func(IN) (OUT, error),
+	solver2 func(IN) (OUT, error),
 ) {
 	var channel chan OUT = make(chan OUT, 1)
 	ok, err := HandleArgumentsAndExecute(os.Args, reader, solver1, solver2, channel)

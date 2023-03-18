@@ -35,10 +35,10 @@ func TestDay04_Reader(t *testing.T) {
 
 func TestDay04_Solver(t *testing.T) {
 	tester := testers.DefaultSolverTesterForComparableTypeR(
-		func(pairs []AssignmentPair) int {
+		func(pairs []AssignmentPair) (int, error) {
 			return CountAssignmentPairsThatSatisfy(OneFullyContainsTheOther, pairs)
 		},
-		func(pairs []AssignmentPair) int {
+		func(pairs []AssignmentPair) (int, error) {
 			return CountAssignmentPairsThatSatisfy(SectionRangesOverlap, pairs)
 		},
 		"CountAssignmentPairsWhereOneFullyContainsTheOther",

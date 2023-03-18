@@ -6,11 +6,13 @@ import (
 	"testing"
 )
 
-// Tests reader for good and bad inputs
+// Tests reader for "good" and "error" inputs
 //
-//   - Good inputs are the ones that result in successful read of the file returning no errors and a value of type T
+//   - "Good" inputs are the ones that result in successful read (no errors) of the file and return a value of type T.
+//     The good tests will aim to check that the returned value matches the expected.
 //
-//   - Bad inputs are the ones that are expected to result in error when reading the file
+//   - "Error" inputs are the ones that are expected to result in error when reading the file.
+//     The error tests will aim to check that reading of the file will indeed result in an error.
 type ReaderTester[T any] struct {
 	reader      func(string) (T, error) // Reader function
 	reader_name string                  // Reader name (to be displayed when running tests)
@@ -52,7 +54,19 @@ func DefaultReaderTesterForComparableTypes[T comparable](
 	return tester
 }
 
-// Add a tests for good input: Add the expected values that the reader should return
+// Override the pattern for filenames that contain input for "good" tests.
+func (tester *ReaderTester[T]) OverrideGoodFilePattern(new_pattern string) *ReaderTester[T] {
+	tester.good_file_pattern = new_pattern
+	return tester
+}
+
+// Override the pattern for filenames that contain input for "error" tests.
+func (tester *ReaderTester[T]) OverrideErrorFilePattern(new_pattern string) *ReaderTester[T] {
+	tester.error_file_pattern = new_pattern
+	return tester
+}
+
+// !!DEPRECATED!! Add a tests for good input: Add the expected values that the reader should return
 func (tester *ReaderTester[T]) AddGoodInputTests(expected_values ...T) {
 	for _, expected_value := range expected_values {
 		test_number := len(tester.good_tests) + 1
@@ -60,12 +74,26 @@ func (tester *ReaderTester[T]) AddGoodInputTests(expected_values ...T) {
 	}
 }
 
-// Add a tests for error input: Add the reasons (to be displayed in the case of test-failure) why reading the input is expected to result in an error
+// Add a test for good input: Add the expected value that the reader should return
+func (tester *ReaderTester[T]) AddGoodInputTest(expected_value T) *ReaderTester[T] {
+	test_number := len(tester.good_tests) + 1
+	tester.good_tests[test_number] = expected_value
+	return tester
+}
+
+// !!DEPRECATED!! Add a tests for error input: Add the reasons (to be displayed in the case of test-failure) why reading the input is expected to result in an error
 func (tester *ReaderTester[T]) AddErrorInputTests(reasons ...string) {
 	for _, reason := range reasons {
 		test_number := len(tester.error_tests) + 1
 		tester.error_tests[test_number] = reason
 	}
+}
+
+// Add a test for error input: Add the reason (to be displayed in the case of test-failure) why reading the input is expected to result in an error
+func (tester *ReaderTester[T]) AddErrorInputTest(reason string) *ReaderTester[T] {
+	test_number := len(tester.error_tests) + 1
+	tester.error_tests[test_number] = reason
+	return tester
 }
 
 // Provide equality-function for T-type (used only in good-input tests)

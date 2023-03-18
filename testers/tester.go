@@ -34,18 +34,20 @@ func DefaultTesterForComparableTypeR[T any, R comparable](
 	return tester
 }
 
-func (tester *Tester[T, R]) ProvideEqualityFunction(equality func(R, R) bool) {
+func (tester *Tester[T, R]) ProvideEqualityFunction(equality func(R, R) bool) *Tester[T, R] {
 	tester.equals = equality
+	return tester
 }
 
-func (tester *Tester[T, R]) AddTest(input T, expected R) {
+func (tester *Tester[T, R]) AddTest(input T, expected R) *Tester[T, R] {
 	tester.tests = append(tester.tests, struct {
 		input    T
 		expected R
 	}{input, expected})
+	return tester
 }
 
-func (tester *Tester[T, R]) RunTests(t *testing.T) {
+func (tester *Tester[T, R]) RunTests(t *testing.T) *Tester[T, R] {
 	for test_number, test := range tester.tests {
 		if tester.equals == nil {
 			t.Error("Test failed. Equality function needs to be provided")
@@ -57,4 +59,5 @@ func (tester *Tester[T, R]) RunTests(t *testing.T) {
 			t.Errorf("Expected: %v", test.expected)
 		}
 	}
+	return tester
 }

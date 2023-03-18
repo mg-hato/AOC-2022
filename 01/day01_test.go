@@ -28,8 +28,8 @@ func TestDay01_Reader(t *testing.T) {
 
 func TestDay01_Solver(t *testing.T) {
 	tester := testers.DefaultSolverTesterForComparableTypeR(
-		func(list List) int { return GetTotalCaloriesSumOfTopN(list, 1) },
-		func(list List) int { return GetTotalCaloriesSumOfTopN(list, 3) },
+		func(list List) (int, error) { return GetTotalCaloriesSumOfTopN(list, 1) },
+		func(list List) (int, error) { return GetTotalCaloriesSumOfTopN(list, 3) },
 		"GetSumOfTop1",
 		"GetSumOfTop3",
 	)
