@@ -78,7 +78,7 @@ func (it *integration_tester[T, R]) AddTestCase(
 	if len(outcomes)+1 != len(it.solvers) {
 		it.t.Errorf(
 			"IntegrationTester fatal error: number of solvers (%d) does not match the number of expected outcomes (%d)",
-			len(it.solvers), len(outcomes),
+			len(it.solvers), len(outcomes)+1,
 		)
 		it.t.FailNow()
 	} else {
