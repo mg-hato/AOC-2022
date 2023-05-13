@@ -5,6 +5,7 @@ import (
 	"aoc/envelope"
 	f "aoc/functional"
 	"aoc/reading"
+	"errors"
 	"fmt"
 	"regexp"
 )
@@ -51,13 +52,19 @@ func (mgr *monkey_graph_reader) Error() error {
 
 func (mgr *monkey_graph_reader) PerformFinalValidation() error {
 
+	// Ensure that there are at least two monkeys
+	if len(mgr.monkeys) < 2 {
+		return fmt.Errorf(
+			"Error: Monkey Graph needs at least 2 monkeys to calculate monkey business value, but this graph has %d monkey(s)",
+			len(mgr.monkeys),
+		)
+	}
+
 	// Ensure that the monkey IDs are from 0 incrementing
 	for expectedId, monkey := range mgr.monkeys {
 		if expectedId != monkey.MonkeyId {
-			return fmt.Errorf(
-				"Error: expected monkey IDs are (in order): %v, but the actual ones are: %v",
-				f.Range(0, len(mgr.monkeys)),
-				f.Map(func(m models.Monkey) int { return m.MonkeyId }, mgr.monkeys),
+			return errors.New(
+				"Error: monkey IDs are not in incrementing order from 0 onwards",
 			)
 		}
 	}
@@ -72,7 +79,7 @@ func (mgr *monkey_graph_reader) PerformFinalValidation() error {
 	// Ensure that no monkey passes items to itself (self-loop)
 	for id, monkey := range mgr.monkeys {
 		if monkey.OnFalse == id || monkey.OnTrue == id {
-			return fmt.Errorf("Error: Monkey %d can pass items to itself (self-loop)", id)
+			return fmt.Errorf("Error: Monkey %d should not pass items to itself (self-loop)", id)
 		}
 	}
 

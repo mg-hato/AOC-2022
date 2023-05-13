@@ -4,125 +4,102 @@ import (
 	"testing"
 )
 
-type SolverTester[T any, R any] struct {
-	tests []struct {
-		input             T
-		expected_result_1 R
-		expected_result_2 R
-	}
+type solver_tester[T, R any] struct {
+	t *testing.T
 
-	solver_1_func_name string
-	sovler_2_func_name string
+	solvers []func(T) (R, error)
 
-	solver_1 func(T) (R, error)
-	solver_2 func(T) (R, error)
+	can_add_solvers bool
 
-	equals func(R, R) bool
+	test_cases []solver_tester_test_case[T, R]
+
+	eq_func func(R, R) bool
 }
 
-// Default Solver tester with some predefined values.
-// User is expected to define equality-function for result-type R.
-func DefaultSolverTester[T any, R any](solver_1, solver_2 func(T) (R, error), solver_1_name, solver_2_name string) *SolverTester[T, R] {
-	return &SolverTester[T, R]{
-		tests: []struct {
-			input             T
-			expected_result_1 R
-			expected_result_2 R
-		}{},
+// Solver Tester constructor function
+func SolverTester[T, R any](t *testing.T) *solver_tester[T, R] {
+	return &solver_tester[T, R]{
+		t: t,
 
-		solver_1: solver_1,
-		solver_2: solver_2,
-
-		solver_1_func_name: solver_1_name,
-		sovler_2_func_name: solver_2_name,
+		solvers:         make([]func(T) (R, error), 0),
+		test_cases:      make([]solver_tester_test_case[T, R], 0),
+		can_add_solvers: true,
 	}
 }
 
-func (tester *SolverTester[T, R]) ProvideEqualityFunctionForTypeR(equality_func func(R, R) bool) *SolverTester[T, R] {
-	tester.equals = equality_func
-	return tester
+// Solver Tester constructor function for comparable results
+func SolverTesterForComparableResults[T any, R comparable](t *testing.T) *solver_tester[T, R] {
+	return SolverTester[T, R](t).
+		ProvideEqualityFunction(func(lhs, rhs R) bool { return lhs == rhs })
 }
 
-// Default Solver tester with some predefined values.
-// The equality-function for result-type R comes out of the box.
-func DefaultSolverTesterForComparableTypeR[T any, R comparable](solver_1, solver_2 func(T) (R, error), solver_1_name, solver_2_name string) *SolverTester[T, R] {
-	tester := DefaultSolverTester(solver_1, solver_2, solver_1_name, solver_2_name)
-	tester.equals = func(lhs, rhs R) bool { return lhs == rhs }
-	return tester
+// Provide an equality function for results produced by the solver(s)
+func (st *solver_tester[T, R]) ProvideEqualityFunction(eq_func func(R, R) bool) *solver_tester[T, R] {
+	st.eq_func = eq_func
+	return st
 }
 
-// Add test for the solver
-func (tester *SolverTester[T, R]) AddTest(input T, expected_result_1, expected_result_2 R) *SolverTester[T, R] {
-	tester.tests = append(tester.tests, struct {
-		input             T
-		expected_result_1 R
-		expected_result_2 R
-	}{
-		input:             input,
-		expected_result_1: expected_result_1,
-		expected_result_2: expected_result_2,
-	})
-	return tester
-}
-
-// Retrieves the appropriate solver based on the `solver_id`
-func (tester *SolverTester[T, R]) getSolver(solver_id int) func(T) (R, error) {
-	if solver_id == 1 {
-		return tester.solver_1
+// Provide a solver function.
+//
+// N.B. all "ProvideSolver" calls ought to be made before providing expected outcomes
+func (st *solver_tester[T, R]) ProvideSolver(solver func(T) (R, error)) *solver_tester[T, R] {
+	if st.can_add_solvers {
+		st.solvers = append(st.solvers, solver)
 	} else {
-		return tester.solver_2
+		st.t.Error("SolverTester fatal error: Cannot add further solvers after providing test cases")
+		st.t.FailNow()
 	}
+	return st
 }
 
-// Retrieve the appropriate solver function name based on the `solver_id`
-func (tester *SolverTester[T, R]) getSolverFuncName(solver_id int) string {
-	if solver_id == 1 {
-		return tester.solver_1_func_name
+// Provide a test case i.e. an input data with expected outcomes for each solver
+//
+// N.B. Number of expected outcomes ought to match the number of previously provided solvers.
+// Also, no more solver can be added after this method is invoked.
+func (st *solver_tester[T, R]) AddTestCase(
+	data T,
+	outcome expected_outcome[R],
+	outcomes ...expected_outcome[R],
+) *solver_tester[T, R] {
+	st.can_add_solvers = false
+	if len(outcomes)+1 != len(st.solvers) {
+		st.t.Errorf(
+			"SolverTester fatal error: number of solvers (%d) does not match the number of expected outcomes (%d)",
+			len(st.solvers), len(outcomes),
+		)
+		st.t.FailNow()
 	} else {
-		return tester.sovler_2_func_name
-	}
-}
-
-// Run solver test based on the solver_id
-func (tester *SolverTester[T, R]) testSolver(t *testing.T, solver_id int) *SolverTester[T, R] {
-	for i, test := range tester.tests {
-		test_number := i + 1
-		var expected_result R
-
-		// Get the expected result
-		if solver_id == 1 {
-			expected_result = test.expected_result_1
-		} else {
-			expected_result = test.expected_result_2
+		test_case := solver_tester_test_case[T, R]{
+			append([]expected_outcome[R]{outcome}, outcomes...),
+			data,
 		}
+		test_case.addPrefixes()
+		st.test_cases = append(st.test_cases, test_case)
+	}
+	return st
+}
 
-		// If the result and the expected result do not match: test fails
-		result, e := tester.getSolver(solver_id)(test.input)
-		if e != nil {
-			t.Errorf("Test for solver %d #%d failed: %s(%v)", solver_id, test_number, tester.getSolverFuncName(solver_id), test.input)
-			t.Errorf("Unexpected error occurred: %v", e)
-		} else if !tester.equals(result, expected_result) {
-			t.Errorf("Test for solver %d #%d failed: %s(%v)", solver_id, test_number, tester.getSolverFuncName(solver_id), test.input)
-			t.Errorf("Returned: %v", result)
-			t.Errorf("Expected: %v", expected_result)
+func (st *solver_tester[T, R]) performChecksBeforeRunningTests() bool {
+	if len(st.test_cases) == 0 {
+		st.t.Error("There were no test cases provided; nothing to test")
+		return false
+	} else if st.eq_func == nil {
+		st.t.Error("No equality function was provided; tests cannot be run")
+		st.t.FailNow()
+		return false
+	}
+	return true
+}
+
+func (st *solver_tester[T, R]) RunSolverTests() *solver_tester[T, R] {
+	if !st.performChecksBeforeRunningTests() {
+		return st
+	}
+	for _, test_case := range st.test_cases {
+		for i := 0; i < len(st.solvers); i++ {
+			result, err := st.solvers[i](test_case.input_data)
+			test_case.expected_outcomes[i].testOutcome(st.t, st.eq_func, result, err)
 		}
 	}
-	return tester
-}
-
-// Run tests for the first solver
-func (tester *SolverTester[T, R]) RunFirstSolverTests(t *testing.T) *SolverTester[T, R] {
-	return tester.testSolver(t, 1)
-}
-
-// Run tests for the second solver
-func (tester *SolverTester[T, R]) RunSecondSolverTests(t *testing.T) *SolverTester[T, R] {
-	return tester.testSolver(t, 2)
-}
-
-// Run tests for both solvers (solver 1 and 2)
-func (tester *SolverTester[T, R]) RunBothSolversTests(t *testing.T) *SolverTester[T, R] {
-	return tester.
-		RunFirstSolverTests(t).
-		RunSecondSolverTests(t)
+	return st
 }
