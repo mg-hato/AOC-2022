@@ -33,7 +33,7 @@ func (ee expect_error[T]) testOutcome(t *testing.T, eq_func func(T, T) bool, res
 	if err != nil {
 		ee.assertThatErrorContainsKeywords(t, err)
 	} else {
-		t.Error(format_with_prefix(ee.prefix, "In ExpectError No error was returned"))
+		t.Error(format_with_prefix(ee.prefix, "In ExpectError no error was returned"))
 	}
 }
 

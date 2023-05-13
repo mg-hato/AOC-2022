@@ -2,8 +2,9 @@ package reader
 
 import (
 	m "aoc/day11/models"
+	e "aoc/envelope"
 	"aoc/reading"
-	"aoc/testers"
+	ts "aoc/testers"
 	"testing"
 )
 
@@ -11,8 +12,9 @@ func TestD11_ReaderTest(t *testing.T) {
 
 	items := func(i ...int) []int { return i }
 
-	testers.DefaultReaderTester(reading.ReadWith(MonkeyGraphReader), "MonkeyGraphReader").
-		AddGoodInputTest(m.CreateMonkeysEnvelopeWith([]m.Monkey{
+	ts.ReaderTester(t, reading.ReadWith(MonkeyGraphReader)).
+		ProvideEqualityFunction(m.MonkeyEnvelopeEqFunc).
+		AddTestCase("./test/input.1", ts.ExpectResult(m.CreateMonkeysEnvelopeWith([]m.Monkey{
 			{
 				MonkeyId:     0,
 				Items:        items(79, 98),
@@ -45,8 +47,8 @@ func TestD11_ReaderTest(t *testing.T) {
 				OnTrue:       0,
 				OnFalse:      1,
 			},
-		})).
-		AddGoodInputTest(m.CreateMonkeysEnvelopeWith([]m.Monkey{
+		}))).
+		AddTestCase("./test/input.2", ts.ExpectResult(m.CreateMonkeysEnvelopeWith([]m.Monkey{
 			{
 				MonkeyId:     0,
 				Items:        items(),
@@ -63,12 +65,45 @@ func TestD11_ReaderTest(t *testing.T) {
 				OnTrue:       0,
 				OnFalse:      0,
 			},
-		})).
-		ProvideEqualityFunctionForTypeT(m.MonkeyEnvelopeEqFunc).
-		AddErrorInputTest("Divisibility test with 0").
-		AddErrorInputTest("Self-loop on monkey 0").
-		AddErrorInputTest("Monkey 1 throws out of bounds in false-case").
-		AddErrorInputTest("Monkey 1 throws out of bounds in true-case").
-		AddErrorInputTest("Bad ID order").
-		RunBothGoodAndErrorInputTests(t)
+		}))).
+		AddTestCase(
+			"./test/bad-input.1", ts.ExpectError[e.Envelope[[]m.Monkey]](
+				"div", "0",
+			),
+		).
+		AddTestCase(
+			"./test/bad-input.2", ts.ExpectError[e.Envelope[[]m.Monkey]](
+				"self-loop",
+			),
+		).
+		AddTestCase(
+			"./test/bad-input.3", ts.ExpectError[e.Envelope[[]m.Monkey]](
+				"outside", "expected", "range", "[0",
+			),
+		).
+		AddTestCase(
+			"./test/bad-input.4", ts.ExpectError[e.Envelope[[]m.Monkey]](
+				"outside", "expected", "range", "[0",
+			),
+		).
+		AddTestCase(
+			"./test/bad-input.5", ts.ExpectError[e.Envelope[[]m.Monkey]](
+				"not", "incrementing", "order",
+			),
+		).
+		AddTestCase(
+			"./test/bad-input.6", ts.ExpectError[e.Envelope[[]m.Monkey]](
+				"at least 2",
+			),
+		).
+		RunReaderTests()
+
+	// ts.DefaultReaderTester(reading.ReadWith(MonkeyGraphReader), "MonkeyGraphReader").
+	// 	ProvideEqualityFunctionForTypeT(m.MonkeyEnvelopeEqFunc).
+	// 	AddErrorInputTest("Divisibility test with 0").
+	// 	AddErrorInputTest("Self-loop on monkey 0").
+	// 	AddErrorInputTest("Monkey 1 throws out of bounds in false-case").
+	// 	AddErrorInputTest("Monkey 1 throws out of bounds in true-case").
+	// 	AddErrorInputTest("Bad ID order").
+	// 	RunBothGoodAndErrorInputTests(t)
 }

@@ -30,7 +30,7 @@ func (envelope MonkeysEnvelope) String() string {
 	)
 }
 
-func CreateMonkeysEnvelopeWith(monkeys []Monkey) MonkeysEnvelope {
+func CreateMonkeysEnvelopeWith(monkeys []Monkey) e.Envelope[[]Monkey] {
 	return MonkeysEnvelope{monkeys: monkeys}
 }
 
