@@ -22,8 +22,8 @@ type SolverTester[T any, R any] struct {
 
 // Default Solver tester with some predefined values.
 // User is expected to define equality-function for result-type R.
-func DefaultSolverTester[T any, R any](solver_1, solver_2 func(T) (R, error), solver_1_name, solver_2_name string) SolverTester[T, R] {
-	return SolverTester[T, R]{
+func DefaultSolverTester[T any, R any](solver_1, solver_2 func(T) (R, error), solver_1_name, solver_2_name string) *SolverTester[T, R] {
+	return &SolverTester[T, R]{
 		tests: []struct {
 			input             T
 			expected_result_1 R
@@ -45,7 +45,7 @@ func (tester *SolverTester[T, R]) ProvideEqualityFunctionForTypeR(equality_func 
 
 // Default Solver tester with some predefined values.
 // The equality-function for result-type R comes out of the box.
-func DefaultSolverTesterForComparableTypeR[T any, R comparable](solver_1, solver_2 func(T) (R, error), solver_1_name, solver_2_name string) SolverTester[T, R] {
+func DefaultSolverTesterForComparableTypeR[T any, R comparable](solver_1, solver_2 func(T) (R, error), solver_1_name, solver_2_name string) *SolverTester[T, R] {
 	tester := DefaultSolverTester(solver_1, solver_2, solver_1_name, solver_2_name)
 	tester.equals = func(lhs, rhs R) bool { return lhs == rhs }
 	return tester

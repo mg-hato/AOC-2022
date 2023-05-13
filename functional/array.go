@@ -254,6 +254,24 @@ func EnumerateWithFirstIndex[T any](arr []T, firstIndex int) []Pair[int, T] {
 	return enumerated
 }
 
+// Numbers l, l+1, ... r-1, r
+func RangeInclusive(l, r int) []int {
+	return Range(l, r+1)
+}
+
+// Numbers l, l+1, .... r-1
+func Range(l, r int) []int {
+	if l > r {
+		r = l
+	}
+	var arr []int = make([]int, r-l)
+	for i := 0; l < r; i++ {
+		arr[i] = l
+		l++
+	}
+	return arr
+}
+
 // Group elements of `arr` into a map. Keys and values are defined by extraction functions `keyf` and `valf`, respectively.
 //
 // Key of an element `x` of `arr` is `keyf(x)`

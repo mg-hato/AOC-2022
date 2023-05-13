@@ -3,6 +3,7 @@ package testers
 import (
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -31,7 +32,7 @@ type ReaderTester[T any] struct {
 func DefaultReaderTester[T any](
 	reader func(string) (T, error),
 	reader_name string,
-) ReaderTester[T] {
+) *ReaderTester[T] {
 	tester := ReaderTester[T]{
 		reader:             reader,
 		reader_name:        reader_name,
@@ -40,7 +41,7 @@ func DefaultReaderTester[T any](
 		error_tests:        map[int]string{},
 		error_file_pattern: "./test/bad-input.%d",
 	}
-	return tester
+	return &tester
 }
 
 // Returns a reader tester with some defaults pre-defined.
@@ -48,7 +49,7 @@ func DefaultReaderTester[T any](
 func DefaultReaderTesterForComparableTypes[T comparable](
 	reader func(string) (T, error),
 	reader_name string,
-) ReaderTester[T] {
+) *ReaderTester[T] {
 	tester := DefaultReaderTester(reader, reader_name)
 	tester.equals = func(lhs, rhs T) bool { return lhs == rhs }
 	return tester
@@ -97,18 +98,23 @@ func (tester *ReaderTester[T]) AddErrorInputTest(reason string) *ReaderTester[T]
 }
 
 // Provide equality-function for T-type (used only in good-input tests)
-func (tester *ReaderTester[T]) ProvideEqualityFunctionForTypeT(equality_func func(T, T) bool) {
+func (tester *ReaderTester[T]) ProvideEqualityFunctionForTypeT(equality_func func(T, T) bool) *ReaderTester[T] {
 	tester.equals = equality_func
+	return tester
 }
 
 // Run good-input tests
-func (tester *ReaderTester[T]) RunGoodInputTests(t *testing.T) {
-	for test_number, expected_value := range tester.good_tests {
+func (tester *ReaderTester[T]) RunGoodInputTests(t *testing.T) *ReaderTester[T] {
 
-		if tester.equals == nil {
-			t.Errorf("Error: Equality function for T-type not defined")
-			return
-		}
+	if len(tester.good_tests) > 0 && tester.equals == nil {
+		t.Errorf(
+			"Error: Equality function for T-type not defined, where T-type is %s",
+			strings.TrimPrefix(fmt.Sprintf("%T", new(T)), "*"),
+		)
+		return tester
+	}
+
+	for test_number, expected_value := range tester.good_tests {
 
 		filename := fmt.Sprintf(tester.good_file_pattern, test_number)
 		result, err := tester.reader(filename)
@@ -126,10 +132,11 @@ func (tester *ReaderTester[T]) RunGoodInputTests(t *testing.T) {
 			}
 		}
 	}
+	return tester
 }
 
 // Run error-input tests
-func (tester *ReaderTester[T]) RunErrorInputTests(t *testing.T) {
+func (tester *ReaderTester[T]) RunErrorInputTests(t *testing.T) *ReaderTester[T] {
 	for test_number, reason := range tester.error_tests {
 
 		filename := fmt.Sprintf(tester.error_file_pattern, test_number)
@@ -150,10 +157,12 @@ func (tester *ReaderTester[T]) RunErrorInputTests(t *testing.T) {
 			t.Errorf("Input is expected to return an error because: %s", reason)
 		}
 	}
+	return tester
 }
 
 // Run both group of tests
-func (tester *ReaderTester[T]) RunBothGoodAndErrorInputTests(t *testing.T) {
-	tester.RunGoodInputTests(t)
-	tester.RunErrorInputTests(t)
+func (tester *ReaderTester[T]) RunBothGoodAndErrorInputTests(t *testing.T) *ReaderTester[T] {
+	return tester.
+		RunGoodInputTests(t).
+		RunErrorInputTests(t)
 }
