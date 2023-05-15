@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestD01_Reader(t *testing.T) {
+func TestD01_ReaderTest(t *testing.T) {
 	type Data = e.Envelope[m.CaloryList]
 	cal := func(calories ...int) []int { return calories }
 	cals := func(calories ...[]int) Data { return m.CreateCaloryListEnvelope(calories) }
