@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestD01_Solver(t *testing.T) {
+func TestD01_SolverTest(t *testing.T) {
 	type Data = e.Envelope[m.CaloryList]
 	// helper functions
 	cal := func(calories ...int) []int { return calories }

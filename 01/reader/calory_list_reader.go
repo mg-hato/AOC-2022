@@ -46,7 +46,7 @@ func (clr calory_list_reader) PerformFinalValidation() error {
 }
 
 func (clr calory_list_reader) Done() bool {
-	return false
+	return clr.err != nil
 }
 
 func (clr *calory_list_reader) ProvideLine(line string) {
