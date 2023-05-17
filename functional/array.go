@@ -291,6 +291,16 @@ func GroupBy[T any, K comparable, V any](arr []T, keyf func(T) K, valf func(T) V
 	return grouped
 }
 
+// Returns index of first element satisfying predicate or -1 if no such element exists
+func IndexOf[T any](arr []T, predicate func(T) bool) int {
+	for i := 0; i < len(arr); i++ {
+		if predicate(arr[i]) {
+			return i
+		}
+	}
+	return -1
+}
+
 // Return a reversed version of the array `arr`
 func Reverse[T any](arr []T) []T {
 	var reversed []T = make([]T, len(arr))
