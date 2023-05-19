@@ -1,9 +1,9 @@
 package functional
 
-func InRange(n, left, right int) bool {
-	return left <= n && n < right
+func InRange(left, right int) func(int) bool {
+	return func(n int) bool { return left <= n && n < right }
 }
 
-func InInclusiveRange(n, left, right int) bool {
-	return left <= n && n <= right
+func InInclusiveRange(left, right int) func(int) bool {
+	return func(n int) bool { return left <= n && n <= right }
 }
