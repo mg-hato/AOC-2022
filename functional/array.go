@@ -82,6 +82,12 @@ func CreateKeyValueMap[T any, K comparable, V any](arr []T, keyf func(T) K, valf
 	return newMap
 }
 
+// Create a set from the array `arr`
+// such that for every element `e` of `arr` the corresponding set element would be `keyf(e)`
+func CreateSet[T any, K comparable](arr []T, keyf func(T) K) map[K]bool {
+	return CreateKeyValueMap(arr, keyf, func(T) bool { return true })
+}
+
 // Associate each element of the array with a value
 func AssociateWith[K comparable, V any](arr []K, valf func(K) V) map[K]V {
 	return CreateKeyValueMap(arr, Identity[K], valf)
@@ -175,15 +181,7 @@ func Minimum[T any](arr []T, lt func(T, T) bool) T {
 
 // Checks whether the two arrays have the same elements in the same order
 func ArrayEqual[T comparable](lhs []T, rhs []T) bool {
-	if len(lhs) != len(rhs) {
-		return false
-	}
-	for i, l := range lhs {
-		if l != rhs[i] {
-			return false
-		}
-	}
-	return true
+	return ArrayEqualWith(func(t1, t2 T) bool { return t1 == t2 })(lhs, rhs)
 }
 
 // Checks whether the two array have the same elements in the same order
@@ -205,6 +203,11 @@ func ArrayEqualWith[T any](equality_func func(T, T) bool) func([]T, []T) bool {
 	}
 }
 
+// Checks if two arrays contains exactly the same elements in any order
+func ArrayEqualInAnyOrder[T comparable](lhs, rhs []T) bool {
+	return MapEqual(CreateSet(lhs, Identity[T]), CreateSet(rhs, Identity[T]))
+}
+
 type number interface {
 	int | int8 | int16 | int32 | int64 | float32 | float64 | uint | uint8 | uint16 | uint32 | uint64
 }
@@ -219,6 +222,21 @@ func Sum[T number](arr []T) T {
 type Pair[A, B any] struct {
 	First  A
 	Second B
+}
+
+func GetFirst[A, B any](pair Pair[A, B]) A {
+	return pair.First
+}
+
+func GetSecond[A, B any](pair Pair[A, B]) B {
+	return pair.Second
+}
+
+func MakePair[A, B any](first A, second B) Pair[A, B] {
+	return Pair[A, B]{
+		First:  first,
+		Second: second,
+	}
 }
 
 func Zip[A, B any](arrayA []A, arrayB []B) []Pair[A, B] {
