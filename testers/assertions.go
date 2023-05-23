@@ -13,6 +13,13 @@ func AssertEqual[T comparable](t *testing.T, actual, expected T) bool {
 	return result
 }
 
+func Assert(t *testing.T, value bool) bool {
+	if !value {
+		t.Errorf("Failed assertion")
+	}
+	return value
+}
+
 func AssertEqualWithEqFunc[T any](t *testing.T, actual, expected T, eq_func func(T, T) bool) bool {
 	result := eq_func(actual, expected)
 	if !result {
