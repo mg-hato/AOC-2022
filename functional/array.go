@@ -14,6 +14,13 @@ func Map[T, R any](f func(T) R, arr []T) []R {
 	return mappedArray
 }
 
+// Maps function `f` onto every element of given matrix and returns the new mapped matrix
+func MatrixMap[T, R any](f func(T) R, matrix [][]T) [][]R {
+	return Map(func(row []T) []R {
+		return Map(f, row)
+	}, matrix)
+}
+
 // Fold-right
 func Foldr[T, R any](f func(T, R) R, arr []T, b R) R {
 	var i int = len(arr)
@@ -277,12 +284,24 @@ func Zip[A, B any](arrayA []A, arrayB []B) []Pair[A, B] {
 	return zipped
 }
 
+// Creates an array of length `times` by repeating element `x`
 func Repeat[T any](x T, times int) []T {
 	array := make([]T, times)
 	for i := 0; i < times; i++ {
 		array[i] = x
 	}
 	return array
+}
+
+// Returns the number of elements in `arr` that satisfy the given predicate
+func Count[T any](arr []T, predicate func(T) bool) int {
+	count := 0
+	for i := 0; i < len(arr); i++ {
+		if predicate(arr[i]) {
+			count++
+		}
+	}
+	return count
 }
 
 // Enumerate the array with numbers starting from 0
