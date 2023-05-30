@@ -1,0 +1,9 @@
+$ cd /
+$ ls
+15 a.txt
+13 b.txt
+
+7 a.txt
+dir aaa
+$ cd aaa
+$ ls

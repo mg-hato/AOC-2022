@@ -1,0 +1,12 @@
+$ cd /
+$ ls
+dir x
+dir y
+$ cd x
+$ ls 
+1000 myfavouritesong.avi
+2000 myfavoritepoem.pdf
+$ cd ..
+$ cd y
+$ ls 
+3000 somefile.txt

@@ -1,0 +1,14 @@
+$ cd /
+$ ls
+dir pictures
+10134 p.pdf
+dir music
+$ cd music
+$ ls
+245689 mamasc.wav
+301011 strangersinthenight.wav
+$ cd ..
+$ cd pictures
+$ ls
+15987 dog.jpg
+15101 cat.jpg

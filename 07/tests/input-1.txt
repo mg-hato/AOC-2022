@@ -1,0 +1,19 @@
+$ cd /
+$ ls
+dir a
+dir b
+$ cd a
+$ ls
+69800999 a.txt 
+$ cd /
+$ cd b
+$ ls 
+dir c
+dir d
+$ cd c
+$ ls
+99002 c.log.zip
+$ cd ..
+$ cd d
+$ ls
+100000 d.exe

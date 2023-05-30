@@ -208,6 +208,27 @@ func ArrayEqualInAnyOrder[T comparable](lhs, rhs []T) bool {
 	return MapEqual(CreateSet(lhs, Identity[T]), CreateSet(rhs, Identity[T]))
 }
 
+func ArrayEqualInAnyOrderWith[T any](equality_func func(T, T) bool) func([]T, []T) bool {
+	return func(lhs, rhs []T) bool {
+		if len(lhs) != len(rhs) {
+			return false
+		}
+		rhs_matched := make([]bool, len(rhs))
+		enumerated_rhs := Enumerate(rhs)
+		for _, lhs_element := range lhs {
+			matched_index := IndexOf(enumerated_rhs, func(element Pair[int, T]) bool {
+				return !rhs_matched[element.First] && equality_func(lhs_element, element.Second)
+			})
+
+			if matched_index == -1 {
+				return false
+			}
+			rhs_matched[matched_index] = true
+		}
+		return true
+	}
+}
+
 type number interface {
 	int | int8 | int16 | int32 | int64 | float32 | float64 | uint | uint8 | uint16 | uint32 | uint64
 }
@@ -254,6 +275,14 @@ func Zip[A, B any](arrayA []A, arrayB []B) []Pair[A, B] {
 		zipped[i] = Pair[A, B]{arrayA[i], arrayB[i]}
 	}
 	return zipped
+}
+
+func Repeat[T any](x T, times int) []T {
+	array := make([]T, times)
+	for i := 0; i < times; i++ {
+		array[i] = x
+	}
+	return array
 }
 
 // Enumerate the array with numbers starting from 0
