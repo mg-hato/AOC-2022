@@ -1,0 +1,9 @@
+addx 10
+noop
+
+noop
+addx  -17 
+
+noop
+
+addx 0
