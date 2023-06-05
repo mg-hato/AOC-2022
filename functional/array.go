@@ -186,6 +186,11 @@ func Minimum[T any](arr []T, lt func(T, T) bool) T {
 	return Foldl(f, arr, arr[0])
 }
 
+// Returns true iff array contains the given item
+func ArrayContains[T comparable](array []T, item T) bool {
+	return Any(func(element T) bool { return element == item }, array)
+}
+
 // Checks whether the two arrays have the same elements in the same order
 func ArrayEqual[T comparable](lhs []T, rhs []T) bool {
 	return ArrayEqualWith(func(t1, t2 T) bool { return t1 == t2 })(lhs, rhs)
