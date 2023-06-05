@@ -36,6 +36,14 @@ func AssertNoError(t *testing.T, e error) bool {
 	return result
 }
 
+func AssertError(t *testing.T, e error) bool {
+	result := e != nil
+	if !result {
+		t.Errorf("Failed assertion: expected an error, but no error was received")
+	}
+	return result
+}
+
 func AssertFileCanBeOpenedForReading(t *testing.T, filename string) bool {
 	file, err := os.Open(filename)
 	result := err == nil

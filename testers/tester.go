@@ -17,8 +17,8 @@ type Tester[T any, R any] struct {
 func DefaultTester[T any, R any](
 	function func(T) R,
 	function_name string,
-) Tester[T, R] {
-	return Tester[T, R]{
+) *Tester[T, R] {
+	return &Tester[T, R]{
 		function:      function,
 		function_name: function_name,
 		tests:         nil,
@@ -28,7 +28,7 @@ func DefaultTester[T any, R any](
 func DefaultTesterForComparableTypeR[T any, R comparable](
 	function func(T) R,
 	function_name string,
-) Tester[T, R] {
+) *Tester[T, R] {
 	tester := DefaultTester(function, function_name)
 	tester.equals = func(lhs, rhs R) bool { return lhs == rhs }
 	return tester
@@ -51,6 +51,7 @@ func (tester *Tester[T, R]) RunTests(t *testing.T) *Tester[T, R] {
 	for test_number, test := range tester.tests {
 		if tester.equals == nil {
 			t.Error("Test failed. Equality function needs to be provided")
+			return tester
 		}
 		if result := tester.function(test.input); !tester.equals(result, test.expected) {
 			t.Errorf("Test #%d failed: %s(%v)", test_number, tester.function_name, test.input)
