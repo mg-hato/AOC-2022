@@ -395,3 +395,8 @@ func ConstZero[T, R any](_ T) R {
 	var r R
 	return r
 }
+
+func GetZero[T any]() T {
+	var zero_value T
+	return zero_value
+}
