@@ -24,15 +24,24 @@ func GetKeys[K comparable, V any](m map[K]V) []K {
 
 // Checks if the two maps have the same key-value mappings
 func MapEqual[K, V comparable](lhs, rhs map[K]V) bool {
-	if len(lhs) != len(rhs) {
-		return false
-	}
+	return MapEqualWith[K](func(left, right V) bool {
+		return left == right
+	})(lhs, rhs)
+}
 
-	for k, v := range lhs {
-		if rv, ok := rhs[k]; !ok || v != rv {
+func MapEqualWith[K comparable, V any](equality_func func(V, V) bool) func(map[K]V, map[K]V) bool {
+	return func(lhs, rhs map[K]V) bool {
+
+		if len(lhs) != len(rhs) {
 			return false
 		}
-	}
 
-	return true
+		for k, v := range lhs {
+			if rv, ok := rhs[k]; !ok || !equality_func(v, rv) {
+				return false
+			}
+		}
+
+		return true
+	}
 }
