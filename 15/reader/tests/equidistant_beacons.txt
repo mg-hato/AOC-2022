@@ -1,0 +1,3 @@
+Sensor at x=300, y=500: closest beacon is at x=300, y=400
+
+Sensor at x=300, y=600: closest beacon is at x=301, y=599

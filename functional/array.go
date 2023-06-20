@@ -252,6 +252,22 @@ func Sum[T number](arr []T) T {
 	)
 }
 
+func Min[T number](lhs, rhs T) T {
+	if lhs <= rhs {
+		return lhs
+	} else {
+		return rhs
+	}
+}
+
+func Max[T number](lhs, rhs T) T {
+	if lhs >= rhs {
+		return lhs
+	} else {
+		return rhs
+	}
+}
+
 type Pair[A, B any] struct {
 	First  A
 	Second B
