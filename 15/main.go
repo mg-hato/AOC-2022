@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	argshandle.AoC2022DefaultProgram(
+	argshandle.Program(
 		reading.ReadWith(reader.SensorReportsReader),
 		solver.BeaconExclusionCount(2_000_000),
 		solver.DistressBeaconTuningFrequencyFinder(4_000_000),

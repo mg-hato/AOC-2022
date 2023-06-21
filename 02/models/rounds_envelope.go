@@ -1,8 +1,7 @@
 package models
 
 import (
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
 	"fmt"
 	"strings"
 )
@@ -19,15 +18,15 @@ func (re RoundsEnvelope) Get() []Round {
 
 func (re RoundsEnvelope) String() string {
 	return fmt.Sprintf("RoundsEnvelope[%s]",
-		strings.Join(f.Map(func(r Round) string { return r.String() }, re.rounds), ", "),
+		strings.Join(c.Map(func(r Round) string { return r.String() }, re.rounds), ", "),
 	)
 }
 
 // Constructor function for RoundsEnvelope
-func CreateRoundsEnvelope(rounds []Round) e.Envelope[[]Round] {
+func CreateRoundsEnvelope(rounds []Round) c.Envelope[[]Round] {
 	return RoundsEnvelope{rounds}
 }
 
-func RoundsEnvelopeEqualityFunction(lhs, rhs e.Envelope[[]Round]) bool {
-	return f.ArrayEqual(lhs.Get(), rhs.Get())
+func RoundsEnvelopeEqualityFunction(lhs, rhs c.Envelope[[]Round]) bool {
+	return c.ArrayEqual(lhs.Get(), rhs.Get())
 }

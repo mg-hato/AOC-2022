@@ -1,9 +1,8 @@
 package reader
 
 import (
-	m "aoc/day08/models"
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d08/models"
 	"aoc/reading"
 	"regexp"
 )
@@ -16,7 +15,7 @@ type forest_reader struct {
 	forest_row_re *regexp.Regexp
 }
 
-func ForestReader() reading.ReaderAoC2022[e.Envelope[m.Forest]] {
+func ForestReader() reading.ReaderAoC2022[m.SolverInput] {
 	return &forest_reader{
 		forest:        make(m.Forest, 0),
 		forest_row_re: regexp.MustCompile(`^(\d+) *$`),
@@ -33,9 +32,9 @@ func (fr forest_reader) PerformFinalValidation() error {
 		return empty_forest_error()
 	}
 
-	if row_lengths_are_equal := f.ArrayEqual(
-		f.Map(func(row []byte) int { return len(row) }, fr.forest),
-		f.Repeat(len(fr.forest[0]), len(fr.forest)),
+	if row_lengths_are_equal := c.ArrayEqual(
+		c.Map(func(row []byte) int { return len(row) }, fr.forest),
+		c.Repeat(len(fr.forest[0]), len(fr.forest)),
 	); !row_lengths_are_equal {
 		return different_forest_row_lengths_error(fr.forest)
 	}
@@ -54,9 +53,9 @@ func (fr *forest_reader) ProvideLine(line string) {
 		fr.err = bad_line_error(fr.line_number, line)
 		return
 	}
-	fr.forest = append(fr.forest, f.Map(func(b byte) byte { return b - '0' }, []byte(submatches[1])))
+	fr.forest = append(fr.forest, c.Map(func(b byte) byte { return b - '0' }, []byte(submatches[1])))
 }
 
-func (fr forest_reader) FinishAndGetInputData() e.Envelope[m.Forest] {
+func (fr forest_reader) FinishAndGetInputData() m.SolverInput {
 	return m.ForestEnvelope(fr.forest)
 }

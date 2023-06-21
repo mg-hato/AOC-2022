@@ -1,7 +1,7 @@
 package models
 
 import (
-	"aoc/functional"
+	c "aoc/common"
 	"aoc/testers"
 	"testing"
 )
@@ -19,7 +19,7 @@ func TestD11_MonkeyReceiveTest(t *testing.T) {
 	monkey := test_monkey()
 	monkey.Receive(15)
 	monkey.Receive(100)
-	testers.AssertEqualWithEqFunc(t, monkey.Items, []int{1, 2, 3, 15, 100}, functional.ArrayEqual[int])
+	testers.AssertEqualWithEqFunc(t, monkey.Items, []int{1, 2, 3, 15, 100}, c.ArrayEqual[int])
 }
 
 func TestD11_MonkeyPerformDivisionTestTest(t *testing.T) {

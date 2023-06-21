@@ -1,13 +1,12 @@
 package solver
 
 import (
-	m "aoc/day04/models"
-	e "aoc/envelope"
-	"aoc/functional"
+	c "aoc/common"
+	m "aoc/d04/models"
 )
 
-func CountAssignmentPairs(predicate func(m.SectionAssignmentPair) bool) func(e.Envelope[[]m.SectionAssignmentPair]) (int, error) {
-	return func(envelope e.Envelope[[]m.SectionAssignmentPair]) (int, error) {
-		return len(functional.Filter(predicate, envelope.Get())), nil
+func CountAssignmentPairs(predicate func(m.SectionAssignmentPair) bool) func(m.SolverInput) (int, error) {
+	return func(input m.SolverInput) (int, error) {
+		return len(c.Filter(predicate, input.Get())), nil
 	}
 }

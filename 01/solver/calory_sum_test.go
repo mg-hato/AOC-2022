@@ -1,19 +1,17 @@
 package solver
 
 import (
-	m "aoc/day01/models"
-	e "aoc/envelope"
+	m "aoc/d01/models"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD01_SolverTest(t *testing.T) {
-	type Data = e.Envelope[m.CaloryList]
 	// helper functions
 	cal := func(calories ...int) []int { return calories }
-	cals := func(calories ...[]int) Data { return m.CreateCaloryListEnvelope(calories) }
+	cals := func(calories ...[]int) m.SolverInput { return m.CreateCaloryListEnvelope(calories) }
 
-	ts.SolverTesterForComparableResults[Data, int](t).
+	ts.SolverTesterForComparableResults[m.SolverInput, int](t).
 		ProvideSolver(CalorySumOfTop(1)).
 		ProvideSolver(CalorySumOfTop(3)).
 		AddTestCase(

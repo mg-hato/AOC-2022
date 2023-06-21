@@ -1,7 +1,7 @@
 package solver
 
 import (
-	m "aoc/day10/models"
+	m "aoc/d10/models"
 	ts "aoc/testers"
 	"testing"
 )

@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	"fmt"
 	"strings"
 )
@@ -24,7 +24,7 @@ func (d Directory) String() string {
 		d.name,
 		func() string {
 			if len(d.items) > 0 {
-				return strings.Join(f.GetKeys(d.items), ", ")
+				return strings.Join(c.GetKeys(d.items), ", ")
 			}
 			return "<empty>"
 		}(),
@@ -44,7 +44,7 @@ func (d *Directory) setParent(parent *Directory) {
 }
 
 func (d Directory) GetItems() []Item {
-	return f.GetValues(d.items)
+	return c.GetValues(d.items)
 }
 
 func (d *Directory) shallow_equal(item Item) bool {

@@ -1,15 +1,13 @@
 package reader
 
 import (
-	m "aoc/day05/models"
-	e "aoc/envelope"
+	m "aoc/d05/models"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD05_ReaderTest(t *testing.T) {
-	type Data = e.Envelope[m.MovingPlan]
 
 	ts.ReaderTester(t, reading.ReadWith(MovingPlanReader)).
 		ProvideEqualityFunction(m.MovingPlanEnvelopeEqualityFunction).
@@ -28,14 +26,14 @@ func TestD05_ReaderTest(t *testing.T) {
 				m.MakeMove(1, 1, 3),
 			},
 		}))).
-		AddTestCase("./tests/bad-input-1.txt", ts.ExpectError[Data]("float", "detected", "1", "2", "3", "4")).
-		AddTestCase("./tests/bad-input-2.txt", ts.ExpectError[Data]("float", "detected", "4")).
-		AddTestCase("./tests/bad-input-3.txt", ts.ExpectError[Data]("not aligned")).
-		AddTestCase("./tests/bad-input-4.txt", ts.ExpectError[Data]("stack ID", "unique integer", "[1, 4]")).
-		AddTestCase("./tests/bad-input-5.txt", ts.ExpectError[Data]("source", "destination", "[1, 4]", "line #8")).
-		AddTestCase("./tests/bad-input-6.txt", ts.ExpectError[Data]("source", "destination", "[1, 4]", "line #9")).
-		AddTestCase("./tests/bad-input-7.txt", ts.ExpectError[Data]("same", "source", "destination", "line #10")).
-		AddTestCase("./tests/bad-input-8.txt", ts.ExpectError[Data]("mov", "instruction", "interpret", "line #7", "bad-line")).
-		AddTestCase("./tests/bad-input-9.txt", ts.ExpectError[Data]("container", "interpret", "line #3", "bad-container-line")).
+		AddTestCase("./tests/bad-input-1.txt", ts.ExpectError[m.SolverInput]("float", "detected", "1", "2", "3", "4")).
+		AddTestCase("./tests/bad-input-2.txt", ts.ExpectError[m.SolverInput]("float", "detected", "4")).
+		AddTestCase("./tests/bad-input-3.txt", ts.ExpectError[m.SolverInput]("not aligned")).
+		AddTestCase("./tests/bad-input-4.txt", ts.ExpectError[m.SolverInput]("stack ID", "unique integer", "[1, 4]")).
+		AddTestCase("./tests/bad-input-5.txt", ts.ExpectError[m.SolverInput]("source", "destination", "[1, 4]", "line #8")).
+		AddTestCase("./tests/bad-input-6.txt", ts.ExpectError[m.SolverInput]("source", "destination", "[1, 4]", "line #9")).
+		AddTestCase("./tests/bad-input-7.txt", ts.ExpectError[m.SolverInput]("same", "source", "destination", "line #10")).
+		AddTestCase("./tests/bad-input-8.txt", ts.ExpectError[m.SolverInput]("mov", "instruction", "interpret", "line #7", "bad-line")).
+		AddTestCase("./tests/bad-input-9.txt", ts.ExpectError[m.SolverInput]("container", "interpret", "line #3", "bad-container-line")).
 		RunReaderTests()
 }

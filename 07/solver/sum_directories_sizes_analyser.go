@@ -1,7 +1,7 @@
 package solver
 
 import (
-	m "aoc/day07/models"
+	m "aoc/d07/models"
 )
 
 func SumDirectoriesOfSizeAtMost(size int64) FilesystemAnalyser {

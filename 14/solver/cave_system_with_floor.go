@@ -1,8 +1,8 @@
 package solver
 
 import (
+	c "aoc/common"
 	m "aoc/d14/models"
-	f "aoc/functional"
 )
 
 type cave_system_with_floor struct {
@@ -19,21 +19,17 @@ func DefaultCaveSystemWithFloor(rock_structures []m.RockStructure) CaveSystemSim
 
 	extended_rock_structures := append(rock_structures, []m.Point{m.MakePoint(500, 0)})
 
-	cs.floor_depth = 2 + f.Maximum(
-		f.FlatMap(
-			func(rock_structure m.RockStructure) []int { return f.Map(m.DepthOf, rock_structure) },
-			extended_rock_structures,
-		), func(lhs, rhs int) bool { return lhs < rhs },
-	)
+	cs.floor_depth = 2 + c.Maximum(c.FlatMap(
+		func(rock_structure m.RockStructure) []int { return c.Map(m.DepthOf, rock_structure) },
+		extended_rock_structures,
+	))
 
-	column_values := f.FlatMap(
-		func(rock_structure m.RockStructure) []int { return f.Map(m.ColumnOf, rock_structure) },
+	column_values := c.FlatMap(
+		func(rock_structure m.RockStructure) []int { return c.Map(m.ColumnOf, rock_structure) },
 		extended_rock_structures,
 	)
 
-	cs.floor_left_end, cs.floor_right_end =
-		f.Minimum(column_values, func(lhs, rhs int) bool { return lhs < rhs })-2,
-		f.Maximum(column_values, func(lhs, rhs int) bool { return lhs < rhs })+2
+	cs.floor_left_end, cs.floor_right_end = c.Minimum(column_values)-2, c.Maximum(column_values)+2
 
 	for column := cs.floor_left_end; column <= cs.floor_right_end; column++ {
 		cs.abyss_cave_system.pillars[column] = append(cs.abyss_cave_system.pillars[column], m.MakePillar(cs.floor_depth))

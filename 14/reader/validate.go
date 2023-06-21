@@ -1,8 +1,8 @@
 package reader
 
 import (
+	c "aoc/common"
 	m "aoc/d14/models"
-	f "aoc/functional"
 )
 
 func verify_that_rock_paths_are_horizontal_vertical(rock_structures []m.RockStructure) error {
@@ -17,15 +17,15 @@ func verify_that_rock_paths_are_horizontal_vertical(rock_structures []m.RockStru
 	return nil
 }
 
-func verify_that_no_rock_formation_overlaps_sand_source(sand_source f.Pair[int, int]) func([]m.RockStructure) error {
+func verify_that_no_rock_formation_overlaps_sand_source(sand_source c.Pair[int, int]) func([]m.RockStructure) error {
 	return func(rock_structures []m.RockStructure) error {
 
 		in_range := func(limit_1, limit_2 int) func(int) bool {
 			switch {
 			case limit_1 < limit_2:
-				return f.InInclusiveRange(limit_1, limit_2)
+				return c.InInclusiveRange(limit_1, limit_2)
 			default:
-				return f.InInclusiveRange(limit_2, limit_1)
+				return c.InInclusiveRange(limit_2, limit_1)
 			}
 		}
 

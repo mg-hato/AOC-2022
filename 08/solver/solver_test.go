@@ -1,8 +1,8 @@
 package solver
 
 import (
-	m "aoc/day08/models"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d08/models"
 	ts "aoc/testers"
 	"testing"
 )
@@ -22,7 +22,7 @@ func TestD08_Transpose(t *testing.T) {
 			{36, 0, 777, 16},
 			{48, 0, 7_777, 256},
 		},
-		f.ArrayEqualWith(f.ArrayEqual[int]),
+		c.ArrayEqualWith(c.ArrayEqual[int]),
 	)
 }
 
@@ -37,7 +37,7 @@ func TestD08_ForestEnumeration(t *testing.T) {
 			{{3, make_position(0, 0)}, {6, make_position(0, 1)}, {9, make_position(0, 2)}},
 			{{5, make_position(1, 0)}, {0, make_position(1, 1)}, {5, make_position(1, 2)}},
 		},
-		f.ArrayEqualWith(f.ArrayEqual[tree]),
+		c.ArrayEqualWith(c.ArrayEqual[tree]),
 	)
 }
 
@@ -50,7 +50,7 @@ func TestD08_VisibilityTreeLineAnalyser(t *testing.T) {
 	})
 	analyser := visibility_tree_line_analyser{}
 	analyser.initialise(forest)
-	f.ForEach(analyser.analyseTreeLine, forest)
+	c.ForEach(analyser.analyseTreeLine, forest)
 
 	visible := true
 	not_visible := false
@@ -81,7 +81,7 @@ func TestD08_VisibilityTreeLineAnalyser(t *testing.T) {
 		t,
 		analyser.visibility_mapping,
 		expected_visibility_mapping,
-		f.MapEqual[position, bool],
+		c.MapEqual[position, bool],
 	)
 }
 
@@ -94,7 +94,7 @@ func TestD08_ScenicScoreTreeLineAnalyser(t *testing.T) {
 	})
 	analyser := scenic_score_tree_line_analyser{}
 	analyser.initialise(forest)
-	f.ForEach(analyser.analyseTreeLine, forest)
+	c.ForEach(analyser.analyseTreeLine, forest)
 
 	expected_scenic_scores := map[position]int{
 		// 7678
@@ -126,7 +126,7 @@ func TestD08_ScenicScoreTreeLineAnalyser(t *testing.T) {
 		t,
 		analyser.scenic_scores,
 		expected_scenic_scores,
-		f.MapEqual[position, int],
+		c.MapEqual[position, int],
 	)
 
 }

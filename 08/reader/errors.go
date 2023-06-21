@@ -1,8 +1,8 @@
 package reader
 
 import (
-	"aoc/day08/models"
-	f "aoc/functional"
+	c "aoc/common"
+	"aoc/d08/models"
 	"errors"
 	"fmt"
 )
@@ -21,6 +21,6 @@ func empty_forest_error() error {
 func different_forest_row_lengths_error(forest models.Forest) error {
 	return fmt.Errorf(
 		"reader error when finished reading: forest rows have different lengths, concretely %v",
-		f.Map(func(row []byte) int { return len(row) }, forest),
+		c.Map(func(row []byte) int { return len(row) }, forest),
 	)
 }

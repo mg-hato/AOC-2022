@@ -1,19 +1,18 @@
 package solver
 
 import (
+	c "aoc/common"
 	m "aoc/d13/models"
-	e "aoc/envelope"
-	f "aoc/functional"
 )
 
-func CountOrderedPacketPairs(envelope e.Envelope[[]m.PacketPair]) (int, error) {
-	return f.Sum(f.Map(f.GetFirst[int, m.PacketPair], f.Filter(
-		func(enumerated_packet_pair f.Pair[int, m.PacketPair]) bool {
+func CountOrderedPacketPairs(input m.SolverInput) (int, error) {
+	return c.Sum(c.Map(c.GetFirst[int, m.PacketPair], c.Filter(
+		func(enumerated_packet_pair c.Pair[int, m.PacketPair]) bool {
 			return m.ArePacketsInOrder(
 				enumerated_packet_pair.Second.First,
 				enumerated_packet_pair.Second.Second,
 			)
 		},
-		f.EnumerateWithFirstIndex(envelope.Get(), 1),
+		c.EnumerateWithFirstIndex[m.PacketPair](1)(input.Get()),
 	))), nil
 }

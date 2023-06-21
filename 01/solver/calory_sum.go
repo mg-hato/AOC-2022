@@ -1,16 +1,15 @@
 package solver
 
 import (
-	m "aoc/day01/models"
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d01/models"
 	"fmt"
 	"sort"
 )
 
-func CalorySumOfTop(n int) func(e.Envelope[m.CaloryList]) (int, error) {
-	return func(envelope e.Envelope[m.CaloryList]) (int, error) {
-		var sums []int = f.Map(f.Sum[int], envelope.Get())
+func CalorySumOfTop(n int) func(m.SolverInput) (int, error) {
+	return func(input m.SolverInput) (int, error) {
+		var sums []int = c.Map(c.Sum[int], input.Get())
 		if len(sums) < n {
 			return 0, fmt.Errorf(
 				`error: In solver function "CalorySumOfTop(n = %d)" the calory list passed is of length %d`,
@@ -18,6 +17,6 @@ func CalorySumOfTop(n int) func(e.Envelope[m.CaloryList]) (int, error) {
 			)
 		}
 		sort.Slice(sums, func(i, j int) bool { return sums[i] > sums[j] })
-		return f.Sum(f.Take(n, sums)), nil
+		return c.Sum(c.Take(n, sums)), nil
 	}
 }

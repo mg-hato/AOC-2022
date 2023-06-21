@@ -1,9 +1,8 @@
 package reader
 
 import (
-	m "aoc/day05/models"
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d05/models"
 	"aoc/reading"
 	"regexp"
 	"strconv"
@@ -29,7 +28,7 @@ type moving_plan_reader struct {
 }
 
 // Constructor function for section assignments list reader
-func MovingPlanReader() reading.ReaderAoC2022[e.Envelope[m.MovingPlan]] {
+func MovingPlanReader() reading.ReaderAoC2022[m.SolverInput] {
 	mpr := &moving_plan_reader{
 		err: nil,
 
@@ -88,7 +87,7 @@ func (mpr *moving_plan_reader) processContainerLine(line string) {
 		return
 	}
 
-	stacks, verification_err := verify_stack_ids_and_container_rows(line, f.Reverse(mpr.container_row_lines))
+	stacks, verification_err := verify_stack_ids_and_container_rows(line, c.Reverse(mpr.container_row_lines))
 	if verification_err != nil {
 		mpr.err = verification_err
 		return
@@ -110,7 +109,7 @@ func (mpr *moving_plan_reader) processMoveLine(line string) {
 		return
 	}
 
-	numbers := f.Map(func(s string) int { i, _ := strconv.Atoi(s); return i }, matches[1:])
+	numbers := c.Map(func(s string) int { i, _ := strconv.Atoi(s); return i }, matches[1:])
 	move := m.MakeMove(numbers[0], numbers[1], numbers[2])
 
 	verification_err := verify_move_instruction(move, len(mpr.plan.StartingContainers), mpr.line_number)
@@ -121,6 +120,6 @@ func (mpr *moving_plan_reader) processMoveLine(line string) {
 	mpr.plan.Moves = append(mpr.plan.Moves, move)
 }
 
-func (mpr moving_plan_reader) FinishAndGetInputData() e.Envelope[m.MovingPlan] {
+func (mpr moving_plan_reader) FinishAndGetInputData() m.SolverInput {
 	return m.CreateMovingPlanEnvelope(mpr.plan)
 }

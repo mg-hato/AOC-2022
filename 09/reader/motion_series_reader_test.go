@@ -1,8 +1,7 @@
 package reader
 
 import (
-	m "aoc/day09/models"
-	"aoc/envelope"
+	m "aoc/d09/models"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
@@ -24,7 +23,7 @@ func TestD09_ReaderTest(t *testing.T) {
 		}))).
 		AddTestCase(
 			"./tests/bad-input-1.txt",
-			ts.ExpectError[envelope.Envelope[m.MotionSeries]](`"R 0"`, "line #4", "interpret"),
+			ts.ExpectError[m.SolverInput](`"R 0"`, "line #4", "interpret"),
 		).
 		RunReaderTests()
 }

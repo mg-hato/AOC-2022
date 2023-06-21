@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	ts "aoc/testers"
 	"testing"
 )
@@ -9,19 +9,19 @@ import (
 func TestD14_EnvelopeTest(t *testing.T) {
 	data := func() []RockStructure {
 		return []RockStructure{
-			{f.MakePair(200, 5), f.MakePair(200, 15), f.MakePair(250, 15)},
-			{f.MakePair(100, 17), f.MakePair(111, 17), f.MakePair(123, 17), f.MakePair(123, 21)},
-			{f.MakePair(910, 7), f.MakePair(910, 15)},
+			{c.MakePair(200, 5), c.MakePair(200, 15), c.MakePair(250, 15)},
+			{c.MakePair(100, 17), c.MakePair(111, 17), c.MakePair(123, 17), c.MakePair(123, 21)},
+			{c.MakePair(910, 7), c.MakePair(910, 15)},
 		}
 	}
 
 	envelope := RockStructureEnvelope(data())
 
 	rs := envelope.Get()
-	rs[0] = RockStructure{f.MakePair(7, 7), f.MakePair(7, 10)}
+	rs[0] = RockStructure{c.MakePair(7, 7), c.MakePair(7, 10)}
 	rs[1][2].First = 119
 
-	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), f.ArrayEqualWith(f.ArrayEqual[f.Pair[int, int]]))
+	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), c.ArrayEqualWith(c.ArrayEqual[c.Pair[int, int]]))
 }
 
 func TestD14_Pillar(t *testing.T) {
@@ -46,20 +46,20 @@ func TestD14_Pillar(t *testing.T) {
 
 func TestD14_GetRockPoints(t *testing.T) {
 	cross_product := func(lhs, rhs []int) []Point {
-		return f.FlatMap(func(left int) []Point {
-			return f.Map(func(right int) Point { return MakePoint(left, right) }, rhs)
+		return c.FlatMap(func(left int) []Point {
+			return c.Map(func(right int) Point { return MakePoint(left, right) }, rhs)
 		}, lhs)
 	}
 	expected_rocks := make(map[Point]bool)
-	f.ForEach(func(p Point) { expected_rocks[p] = true }, f.Flatten([][]Point{
-		cross_product(f.RangeInclusive(100, 100), f.RangeInclusive(20, 50)),
+	c.ForEach(func(p Point) { expected_rocks[p] = true }, c.Flatten([][]Point{
+		cross_product(c.RangeInclusive(100, 100), c.RangeInclusive(20, 50)),
 
-		cross_product(f.RangeInclusive(80, 110), f.RangeInclusive(50, 50)),
-		cross_product(f.RangeInclusive(110, 110), f.RangeInclusive(45, 50)),
-		cross_product(f.RangeInclusive(110, 110), f.RangeInclusive(45, 110)),
+		cross_product(c.RangeInclusive(80, 110), c.RangeInclusive(50, 50)),
+		cross_product(c.RangeInclusive(110, 110), c.RangeInclusive(45, 50)),
+		cross_product(c.RangeInclusive(110, 110), c.RangeInclusive(45, 110)),
 
-		cross_product(f.RangeInclusive(500, 507), f.RangeInclusive(31, 31)),
-		cross_product(f.RangeInclusive(507, 507), f.RangeInclusive(21, 31)),
+		cross_product(c.RangeInclusive(500, 507), c.RangeInclusive(31, 31)),
+		cross_product(c.RangeInclusive(507, 507), c.RangeInclusive(21, 31)),
 	}))
 	rock_struct := []RockStructure{
 		{MakePoint(100, 50), MakePoint(100, 20)},
@@ -69,7 +69,7 @@ func TestD14_GetRockPoints(t *testing.T) {
 	ts.AssertEqualWithEqFunc(
 		t,
 		GetRockPoints(rock_struct),
-		f.GetKeys(expected_rocks),
-		f.ArrayEqualInAnyOrder[Point],
+		c.GetKeys(expected_rocks),
+		c.ArrayEqualInAnyOrder[Point],
 	)
 }

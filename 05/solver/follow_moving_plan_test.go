@@ -1,15 +1,13 @@
 package solver
 
 import (
-	m "aoc/day05/models"
-	e "aoc/envelope"
+	m "aoc/d05/models"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD05_SolverTest(t *testing.T) {
-	type InputData = e.Envelope[m.MovingPlan]
-	ts.SolverTesterForComparableResults[InputData, string](t).
+	ts.SolverTesterForComparableResults[m.SolverInput, string](t).
 		ProvideSolver(FollowMovingPlanWith(CrateMover9000())).
 		ProvideSolver(FollowMovingPlanWith(CrateMover9001())).
 		AddTestCase(m.CreateMovingPlanEnvelope(m.MovingPlan{

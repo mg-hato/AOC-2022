@@ -1,15 +1,13 @@
 package reader
 
 import (
-	m "aoc/day07/models"
-	"aoc/envelope"
+	m "aoc/d07/models"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD07_ReaderTest(t *testing.T) {
-	type Data = envelope.Envelope[[]m.Command]
 	ts.ReaderTester(t, reading.ReadWith(TerminalOutputReader)).
 		ProvideEqualityFunction(m.CommandsEnvelopeEqualityFunction).
 		AddTestCase("./tests/input-1.txt", ts.ExpectResult(m.CreateCommandsEnvelope(
@@ -31,8 +29,8 @@ func TestD07_ReaderTest(t *testing.T) {
 				m.MakeFile("cat.jpg", 15_101),
 			),
 		))).
-		AddTestCase("./tests/bad-input-1.txt", ts.ExpectError[Data]("line #1", "first", "command", "cd /", "cd xyz")).
-		AddTestCase("./tests/bad-input-2.txt", ts.ExpectError[Data]("line #3", ".gitignore")).
-		AddTestCase("./tests/bad-input-3.txt", ts.ExpectError[Data]("line #6", "duplicate")).
+		AddTestCase("./tests/bad-input-1.txt", ts.ExpectError[m.SolverInput]("line #1", "first", "command", "cd /", "cd xyz")).
+		AddTestCase("./tests/bad-input-2.txt", ts.ExpectError[m.SolverInput]("line #3", ".gitignore")).
+		AddTestCase("./tests/bad-input-3.txt", ts.ExpectError[m.SolverInput]("line #6", "duplicate")).
 		RunReaderTests()
 }

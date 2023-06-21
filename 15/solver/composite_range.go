@@ -1,19 +1,19 @@
 package solver
 
 import (
+	c "aoc/common"
 	m "aoc/d15/models"
-	f "aoc/functional"
 	"sort"
 )
 
 // Represents a collection of integer ranges
 type composite_range struct {
-	ranges []f.Pair[int, int]
+	ranges []c.Pair[int, int]
 }
 
 // Returns a list of x-coordinate exclusion ranges where no distress beacon can appear on the provided/fixed y coordinate
 func compositeExclusionRangeForFixedY(y int, reports []m.SensorReport) composite_range {
-	exclusion_ranges := make([]f.Pair[int, int], 0)
+	exclusion_ranges := make([]c.Pair[int, int], 0)
 
 	// From the reports produce distress beacon x-axis-exclusion ranges for fixed y
 	for i := 0; i < len(reports); i++ {
@@ -22,7 +22,7 @@ func compositeExclusionRangeForFixedY(y int, reports []m.SensorReport) composite
 		beacon_distance := m.Distance(reports[i].Sensor, reports[i].Beacon)
 
 		if axis_distance <= beacon_distance {
-			exclusion_ranges = append(exclusion_ranges, f.MakePair(
+			exclusion_ranges = append(exclusion_ranges, c.MakePair(
 				reports[i].Sensor.First-(beacon_distance-axis_distance),
 				reports[i].Sensor.First+(beacon_distance-axis_distance),
 			))
@@ -34,7 +34,7 @@ func compositeExclusionRangeForFixedY(y int, reports []m.SensorReport) composite
 		return exclusion_ranges[i].First < exclusion_ranges[j].First
 	})
 
-	merged_ranges := make([]f.Pair[int, int], 0)
+	merged_ranges := make([]c.Pair[int, int], 0)
 	if len(exclusion_ranges) > 0 {
 		merged_ranges = append(merged_ranges, exclusion_ranges[0])
 	}
@@ -56,16 +56,16 @@ func compositeExclusionRangeForFixedY(y int, reports []m.SensorReport) composite
 
 // Get the number of different integers belonging to this composite range
 func (cr composite_range) getCoverageCount() int {
-	return f.Sum(f.Map(
-		func(r f.Pair[int, int]) int { return r.Second - r.First + 1 },
+	return c.Sum(c.Map(
+		func(r c.Pair[int, int]) int { return r.Second - r.First + 1 },
 		cr.ranges,
 	))
 }
 
 // Returns true if and only if x belongs to this composite range
 func (cr composite_range) includes(x int) bool {
-	return f.Any(
-		func(r f.Pair[int, int]) bool { return f.InInclusiveRange(r.First, r.Second)(x) },
+	return c.Any(
+		func(r c.Pair[int, int]) bool { return c.InInclusiveRange(r.First, r.Second)(x) },
 		cr.ranges,
 	)
 }
@@ -74,8 +74,8 @@ func (cr composite_range) includes(x int) bool {
 func (cr composite_range) getCoverageCountBetween(left, right int) int {
 	count := 0
 	for _, r := range cr.ranges {
-		left_border := f.Max(left, r.First)
-		right_border := f.Min(right, r.Second)
+		left_border := c.Max(left, r.First)
+		right_border := c.Min(right, r.Second)
 		if left_border <= right_border {
 			count += right_border - left_border + 1
 		}
@@ -87,7 +87,7 @@ func (cr composite_range) getCoverageCountBetween(left, right int) int {
 func (cr composite_range) getFirstNonNegativeNumberNotInCompositeRange() int {
 	current := 0
 	for _, r := range cr.ranges {
-		if f.InInclusiveRange(r.First, r.Second)(current) {
+		if c.InInclusiveRange(r.First, r.Second)(current) {
 			current = r.Second + 1
 		}
 	}

@@ -1,8 +1,7 @@
 package models
 
 import (
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
 )
 
 type forest_envelope struct {
@@ -10,15 +9,15 @@ type forest_envelope struct {
 }
 
 func (env forest_envelope) Get() Forest {
-	return f.Map(func(row []byte) []byte {
-		return f.Map(f.Identity[byte], row)
+	return c.Map(func(row []byte) []byte {
+		return c.Map(c.Identity[byte], row)
 	}, env.forest)
 }
 
-func ForestEnvelope(forest Forest) e.Envelope[Forest] {
+func ForestEnvelope(forest Forest) c.Envelope[Forest] {
 	return forest_envelope{forest}
 }
 
-func ForestEnvelopeEqualityFunction(lhs, rhs e.Envelope[Forest]) bool {
-	return f.ArrayEqualWith(f.ArrayEqual[byte])(lhs.Get(), rhs.Get())
+func ForestEnvelopeEqualityFunction(lhs, rhs c.Envelope[Forest]) bool {
+	return c.ArrayEqualWith(c.ArrayEqual[byte])(lhs.Get(), rhs.Get())
 }

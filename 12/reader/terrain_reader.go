@@ -1,9 +1,8 @@
 package reader
 
 import (
+	c "aoc/common"
 	m "aoc/d12/models"
-	e "aoc/envelope"
-	f "aoc/functional"
 	"aoc/reading"
 	"regexp"
 	"strings"
@@ -18,7 +17,7 @@ type terrain_reader struct {
 	line_number int
 }
 
-func TerrainReader() reading.ReaderAoC2022[e.Envelope[m.Terrain]] {
+func TerrainReader() reading.ReaderAoC2022[m.SolverInput] {
 	return &terrain_reader{
 		terrain:    make([]string, 0),
 		terrain_re: regexp.MustCompile("^([a-zSE]+) *$"),
@@ -38,17 +37,17 @@ func (tr *terrain_reader) PerformFinalValidation() error {
 	}
 
 	// Check length uniformity
-	if !f.All(func(row string) bool { return len(row) == len(tr.terrain[0]) }, tr.terrain) {
+	if !c.All(func(row string) bool { return len(row) == len(tr.terrain[0]) }, tr.terrain) {
 		return terrain_map_is_not_rectangular_error()
 	}
 
 	// Count letter 'S'
-	if s_count := f.Sum(f.Map(func(s string) int { return strings.Count(s, "S") }, tr.terrain)); s_count != 1 {
+	if s_count := c.Sum(c.Map(func(s string) int { return strings.Count(s, "S") }, tr.terrain)); s_count != 1 {
 		return letter_expected_exactly_once_error('S', s_count)
 	}
 
 	// Count letter 'E'
-	if e_count := f.Sum(f.Map(func(s string) int { return strings.Count(s, "E") }, tr.terrain)); e_count != 1 {
+	if e_count := c.Sum(c.Map(func(s string) int { return strings.Count(s, "E") }, tr.terrain)); e_count != 1 {
 		return letter_expected_exactly_once_error('E', e_count)
 	}
 
@@ -71,6 +70,6 @@ func (tr *terrain_reader) ProvideLine(line string) {
 	}
 }
 
-func (tr *terrain_reader) FinishAndGetInputData() e.Envelope[m.Terrain] {
+func (tr *terrain_reader) FinishAndGetInputData() m.SolverInput {
 	return m.TerrainEnvelope(tr.terrain...)
 }

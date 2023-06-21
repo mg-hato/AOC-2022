@@ -1,9 +1,8 @@
 package solver
 
 import (
-	m "aoc/day03/models"
-	"aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d03/models"
 	ts "aoc/testers"
 	"testing"
 )
@@ -19,7 +18,7 @@ func TestD03_ItemPriorities(t *testing.T) {
 
 func TestD03_FindCommonItems(t *testing.T) {
 	make_set := func(runes []rune) map[rune]bool {
-		return f.AssociateWith(runes, func(rune) bool { return true })
+		return c.AssociateWith(runes, func(rune) bool { return true })
 	}
 	type TestCase struct {
 		input           []string
@@ -39,17 +38,16 @@ func TestD03_FindCommonItems(t *testing.T) {
 			t,
 			make_set(find_common_items(tc.input[0], tc.input[1:]...)),
 			make_set([]rune(tc.expected_common)),
-			f.MapEqual[rune, bool],
+			c.MapEqual[rune, bool],
 		)
 	})
 }
 
 func TestD03_SolverTest(t *testing.T) {
-	type Data = envelope.Envelope[[]m.Rucksack]
 	// helper function
-	data := func(rucksacks ...string) Data { return m.CreateRucksacksEnvelope(rucksacks) }
+	data := func(rucksacks ...string) m.SolverInput { return m.CreateRucksacksEnvelope(rucksacks) }
 
-	ts.SolverTesterForComparableResults[Data, int](t).
+	ts.SolverTesterForComparableResults[m.SolverInput, int](t).
 		ProvideSolver(SumItemPriorities(CompartmentDuplicateItemLocator())).
 		ProvideSolver(SumItemPriorities(BadgeItemLocator())).
 		AddTestCase(
@@ -61,8 +59,8 @@ func TestD03_SolverTest(t *testing.T) {
 				"uWuL", // u
 				"MoWo", // o
 			),
-			ts.ExpectResult(f.Sum(f.Map(get_item_priority, []rune("axWtuo")))),
-			ts.ExpectResult(f.Sum(f.Map(get_item_priority, []rune("BW")))),
+			ts.ExpectResult(c.Sum(c.Map(get_item_priority, []rune("axWtuo")))),
+			ts.ExpectResult(c.Sum(c.Map(get_item_priority, []rune("BW")))),
 		).
 		AddTestCase(
 			data( // group #2 has no badge

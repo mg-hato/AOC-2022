@@ -1,17 +1,16 @@
 package solver
 
 import (
+	c "aoc/common"
 	m "aoc/d15/models"
-	e "aoc/envelope"
-	f "aoc/functional"
 )
 
-func DistressBeaconTuningFrequencyFinder(limit int) func(e.Envelope[[]m.SensorReport]) (int64, error) {
-	return func(envelope e.Envelope[[]m.SensorReport]) (int64, error) {
+func DistressBeaconTuningFrequencyFinder(limit int) func(m.SolverInput) (int64, error) {
+	return func(input m.SolverInput) (int64, error) {
 
-		reports := envelope.Get()
+		reports := input.Get()
 		distress_beacons_count := 0
-		distress_beacon := f.Pair[int, int]{}
+		distress_beacon := c.Pair[int, int]{}
 		for y := 0; y <= limit; y++ {
 
 			composite_exclusion_range := compositeExclusionRangeForFixedY(y, reports)

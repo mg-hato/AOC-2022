@@ -1,8 +1,8 @@
 package solver
 
 import (
+	c "aoc/common"
 	m "aoc/d14/models"
-	f "aoc/functional"
 	ts "aoc/testers"
 	"testing"
 )
@@ -50,7 +50,7 @@ func TestD14_CaveSystem(t *testing.T) {
 		502: {4, 5, 6, 7, 8, 9},
 		503: {4},
 	} {
-		expected_pillars[column] = f.Map(m.MakePillar, depths)
+		expected_pillars[column] = c.Map(m.MakePillar, depths)
 	}
 
 	dropSandAndAssert := func(drop_count int) {
@@ -59,7 +59,7 @@ func TestD14_CaveSystem(t *testing.T) {
 		}
 		ts.AssertEqualWithEqFunc(
 			t, cs.pillars, expected_pillars,
-			f.MapEqualWith[int](f.ArrayEqual[m.Pillar]),
+			c.MapEqualWith[int](c.ArrayEqual[m.Pillar]),
 		)
 	}
 
@@ -112,15 +112,15 @@ func TestD14_BinarySearch(t *testing.T) {
 
 	i, p := cs.pointBinarySearch(m.MakePoint(500, 0))
 	ts.AssertEqual(t, i, 0)
-	ts.AssertEqualWithEqFunc(t, p, []m.Pillar{m.MakePillar(9)}, f.ArrayEqual[m.Pillar])
+	ts.AssertEqualWithEqFunc(t, p, []m.Pillar{m.MakePillar(9)}, c.ArrayEqual[m.Pillar])
 
 	i, p = cs.pointBinarySearch(m.MakePoint(496, 7))
 	ts.AssertEqual(t, i, 1)
-	ts.AssertEqualWithEqFunc(t, p, []m.Pillar{m.MakePillar(6), m.MakePillar(9)}, f.ArrayEqual[m.Pillar])
+	ts.AssertEqualWithEqFunc(t, p, []m.Pillar{m.MakePillar(6), m.MakePillar(9)}, c.ArrayEqual[m.Pillar])
 
 	i, p = cs.pointBinarySearch(m.MakePoint(503, 5))
 	ts.AssertEqual(t, i, 1)
-	ts.AssertEqualWithEqFunc(t, p, []m.Pillar{m.MakePillar(4)}, f.ArrayEqual[m.Pillar])
+	ts.AssertEqualWithEqFunc(t, p, []m.Pillar{m.MakePillar(4)}, c.ArrayEqual[m.Pillar])
 }
 
 func TestD14_FallingTest(t *testing.T) {

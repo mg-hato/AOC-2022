@@ -1,8 +1,8 @@
 package reader
 
 import (
-	"aoc/day05/models"
-	f "aoc/functional"
+	c "aoc/common"
+	"aoc/d05/models"
 	"regexp"
 	"strconv"
 	"strings"
@@ -19,7 +19,7 @@ func verify_stack_ids_and_container_rows(
 ) ([]models.Containers, error) {
 
 	// Extract stack ids: make a mapping from position (on the line) of stack ID to the stack ID
-	stack_ids := f.CreateKeyValueMap(
+	stack_ids := c.CreateKeyValueMap(
 		regexp.MustCompile(`\d+`).FindAllStringIndex(stack_id_line, -1),
 		func(index []int) int { return index[0] },
 		func(index []int) int { i, _ := strconv.Atoi(stack_id_line[index[0]:index[1]]); return i },
@@ -27,8 +27,8 @@ func verify_stack_ids_and_container_rows(
 
 	// Extract container stacks: make a mapping from a container position to container label (letter)
 	container_letter_re := regexp.MustCompile(`[A-Z]`)
-	container_rows := f.Map(func(row string) map[int]string {
-		return f.CreateKeyValueMap(
+	container_rows := c.Map(func(row string) map[int]string {
+		return c.CreateKeyValueMap(
 			container_letter_re.FindAllStringIndex(row, -1),
 			func(index []int) int { return index[0] },
 			func(index []int) string { return row[index[0]:index[1]] },
@@ -36,20 +36,20 @@ func verify_stack_ids_and_container_rows(
 	}, container_row_lines)
 
 	// 1. Verify that stack ids are unique values from 1 to n (where n is the number of stack ids)
-	if !f.ArrayEqualInAnyOrder(f.GetValues(stack_ids), f.RangeInclusive(1, len(stack_ids))) {
+	if !c.ArrayEqualInAnyOrder(c.GetValues(stack_ids), c.RangeInclusive(1, len(stack_ids))) {
 		return nil, invalid_stack_ids_error(len(stack_ids))
 	}
 
 	// 2. Verify that all the containers are aligned with stack IDs
-	if allowed_positions := f.CreateSet(f.GetKeys(stack_ids), f.Identity[int]); !f.All(
+	if allowed_positions := c.CreateSet(c.GetKeys(stack_ids), c.Identity[int]); !c.All(
 		func(position int) bool { return allowed_positions[position] },
-		f.FlatMap(f.GetKeys[int, string], container_rows),
+		c.FlatMap(c.GetKeys[int, string], container_rows),
 	) {
 		return nil, containers_not_aligned_with_stack_ids_error()
 	}
 
 	// 3. Verify that there are no floating containers
-	if floating_stacks_positions := f.Filter(
+	if floating_stacks_positions := c.Filter(
 		func(stack_id_position int) bool {
 			floating_container_detected, empty_space_below := false, false
 			for _, container_row := range container_rows {
@@ -61,9 +61,9 @@ func verify_stack_ids_and_container_rows(
 			}
 			return floating_container_detected
 		},
-		f.GetKeys(stack_ids),
+		c.GetKeys(stack_ids),
 	); len(floating_stacks_positions) > 0 {
-		return nil, floating_containers_error(f.Map(
+		return nil, floating_containers_error(c.Map(
 			func(floating_stack_position int) int { return stack_ids[floating_stack_position] },
 			floating_stacks_positions,
 		))

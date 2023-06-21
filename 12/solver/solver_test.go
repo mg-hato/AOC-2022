@@ -1,8 +1,8 @@
 package solver
 
 import (
+	c "aoc/common"
 	m "aoc/d12/models"
-	"aoc/functional"
 	ts "aoc/testers"
 	"testing"
 )
@@ -35,7 +35,7 @@ func TestD12_FindAllDistances(t *testing.T) {
 			terrain[3][1]: 4, // w
 			terrain[4][1]: 5, // z on row 4
 		},
-		functional.MapEqual[m.Field, int],
+		c.MapEqual[m.Field, int],
 	)
 }
 

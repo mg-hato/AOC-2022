@@ -1,23 +1,22 @@
 package solver
 
 import (
-	m "aoc/day11/models"
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d11/models"
 	"sort"
 )
 
 func CalculateMonkeyBusiness(
 	rounds_requested int,
 	strategy WorryLevelAdjustmentStrategy,
-) func(e.Envelope[[]m.Monkey]) (int64, error) {
-	return func(envelope e.Envelope[[]m.Monkey]) (int64, error) {
+) func(m.SolverInput) (int64, error) {
+	return func(input m.SolverInput) (int64, error) {
 
-		monkeys := f.Map(func(monkey m.Monkey) *m.Monkey { return &monkey }, envelope.Get())
+		monkeys := c.Map(func(monkey m.Monkey) *m.Monkey { return &monkey }, input.Get())
 
 		adjust := getAdjustmentFunction(
 			strategy,
-			f.Map(func(monkey *m.Monkey) int { return monkey.DivTest }, monkeys),
+			c.Map(func(monkey *m.Monkey) int { return monkey.DivTest }, monkeys),
 		)
 
 		analysis_counter := make([]int, len(monkeys))

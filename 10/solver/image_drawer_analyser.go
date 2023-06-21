@@ -1,8 +1,8 @@
 package solver
 
 import (
-	"aoc/day10/models"
-	f "aoc/functional"
+	c "aoc/common"
+	"aoc/d10/models"
 )
 
 func ImageDrawerAnalyser(width, height int) RegisterCapturingAnalyser {
@@ -20,8 +20,8 @@ type image_drawer_analyser struct {
 
 func (ida *image_drawer_analyser) Initialise() {
 	ida.current = 1
-	ida.image = f.Map(
-		func([]rune) []rune { return f.Repeat('.', ida.width) },
+	ida.image = c.Map(
+		func([]rune) []rune { return c.Repeat('.', ida.width) },
 		make([][]rune, ida.height),
 	)
 }
@@ -32,7 +32,7 @@ func (ida image_drawer_analyser) IsDone() bool {
 
 func (ida *image_drawer_analyser) Capture(register int) {
 	current_position := (ida.current - 1) % ida.width
-	if f.InInclusiveRange(register-1, register+1)(current_position) {
+	if c.InInclusiveRange(register-1, register+1)(current_position) {
 		current_height := (ida.current - 1) / ida.width
 		ida.image[current_height][current_position] = '#'
 	}

@@ -2,13 +2,13 @@ package main
 
 import (
 	"aoc/argshandle"
-	"aoc/day08/reader"
-	s "aoc/day08/solver"
+	"aoc/d08/reader"
+	s "aoc/d08/solver"
 	"aoc/reading"
 )
 
 func main() {
-	argshandle.AoC2022DefaultProgram(
+	argshandle.Program(
 		reading.ReadWith(reader.ForestReader),
 		s.AnalyseForest(s.VisibilityTreeLineAnalyser),
 		s.AnalyseForest(s.ScenicScoreTreeLineAnalyser),

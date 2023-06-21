@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	"fmt"
 	"strings"
 )
@@ -15,16 +15,16 @@ type packet_list struct {
 }
 
 func (packet packet_list) String() string {
-	return fmt.Sprintf("[%s]", strings.Join(f.Map(Packet.String, packet.Packets), ","))
+	return fmt.Sprintf("[%s]", strings.Join(c.Map(Packet.String, packet.Packets), ","))
 }
 
 func (packet packet_list) copy() Packet {
-	return &packet_list{f.Map(Packet.copy, packet.Packets)}
+	return &packet_list{c.Map(Packet.copy, packet.Packets)}
 }
 
 func (packet packet_list) equals(rhs Packet) bool {
 	rhs_packet_list, ok := rhs.(*packet_list)
-	return ok && f.ArrayEqualWith(PacketEqualityFunction)(packet.Packets, rhs_packet_list.Packets)
+	return ok && c.ArrayEqualWith(PacketEqualityFunction)(packet.Packets, rhs_packet_list.Packets)
 }
 
 func (lhs packet_list) compare(rhs Packet) comparison_outcome {

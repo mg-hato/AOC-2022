@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	ts "aoc/testers"
 	"testing"
 )
@@ -26,7 +26,7 @@ func TestD07_EnvelopeTest(t *testing.T) {
 	commands := envelope.Get()
 	commands[3] = MakeCommandCd("x")
 
-	ts.AssertEqualWithEqFunc(t, envelope.Get(), data_generator(), f.ArrayEqualWith(CommandEqualityFunc))
+	ts.AssertEqualWithEqFunc(t, envelope.Get(), data_generator(), c.ArrayEqualWith(CommandEqualityFunc))
 }
 
 func TestD07_ShallowCopyAndEquality(t *testing.T) {
@@ -40,7 +40,7 @@ func TestD07_ShallowCopyAndEquality(t *testing.T) {
 		}},
 	}
 
-	new_items := f.Map(Item.shallow_copy, items)
+	new_items := c.Map(Item.shallow_copy, items)
 
 	file, ok := new_items[0].(*File)
 	ts.Assert(t, ok)
@@ -54,7 +54,7 @@ func TestD07_ShallowCopyAndEquality(t *testing.T) {
 	ts.Assert(t, dir.parent == nil)
 	ts.Assert(t, dir.items == nil)
 
-	ts.AssertEqualWithEqFunc(t, items, new_items, f.ArrayEqualWith(ItemShallowEqualityFunction))
+	ts.AssertEqualWithEqFunc(t, items, new_items, c.ArrayEqualWith(ItemShallowEqualityFunction))
 }
 
 func TestD07_CreateFilesystem(t *testing.T) {
@@ -190,7 +190,7 @@ func TestD07_CalculateItemSizes(t *testing.T) {
 	}
 
 	ts.AssertEqual(t, len(sizes), len(expected_sizes))
-	f.ForEach(func(item Item) {
+	c.ForEach(func(item Item) {
 		ts.AssertEqual(t, sizes[item], expected_sizes[item])
 	}, []Item{root, checks, pics, cat, dog, docs, cv, contract})
 }

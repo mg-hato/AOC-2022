@@ -1,8 +1,8 @@
 package reader
 
 import (
-	m "aoc/day11/models"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d11/models"
 	"aoc/testers"
 	"testing"
 )
@@ -40,7 +40,7 @@ func TestD11_MonkeyStartingItemsLineReader(t *testing.T) {
 		lrti("     Starting items:   1001 ,10  ,  990  ,1    ", []int{1001, 10, 990, 1}),
 	}, func(input line_reader_test_input[[]int]) {
 		testers.AssertNoError(t, line_reader.ProcessLine(input.line, monkey))
-		testers.AssertEqualWithEqFunc(t, monkey.Items, input.expected, f.ArrayEqual[int])
+		testers.AssertEqualWithEqFunc(t, monkey.Items, input.expected, c.ArrayEqual[int])
 	})
 }
 

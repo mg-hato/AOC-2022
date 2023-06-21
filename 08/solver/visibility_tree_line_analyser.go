@@ -1,7 +1,7 @@
 package solver
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 )
 
 type visibility_tree_line_analyser struct {
@@ -28,7 +28,7 @@ func (vtla *visibility_tree_line_analyser) analyseTreeLine(tree_line []tree) {
 }
 
 func (vtla visibility_tree_line_analyser) finishAndGetResult() int {
-	return f.Count(f.GetValues(vtla.visibility_mapping), f.Identity[bool])
+	return c.Count(c.GetValues(vtla.visibility_mapping), c.Identity[bool])
 }
 
 func (vtla *visibility_tree_line_analyser) initialise(forest [][]tree) {
@@ -36,7 +36,7 @@ func (vtla *visibility_tree_line_analyser) initialise(forest [][]tree) {
 
 	// Assume by default that the tree is not visible
 	// If during the course of analysis we observe it is visible, we mark it appropriately
-	f.ForEach(func(t tree) {
+	c.ForEach(func(t tree) {
 		vtla.visibility_mapping[t.pos] = false
-	}, f.Flatten(forest))
+	}, c.Flatten(forest))
 }

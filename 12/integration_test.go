@@ -1,17 +1,16 @@
 package main
 
 import (
-	"aoc/d12/models"
+	m "aoc/d12/models"
 	"aoc/d12/reader"
 	"aoc/d12/solver"
-	"aoc/envelope"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD12_IntegrationTest(t *testing.T) {
-	ts.IntegrationTesterForComparableResults[envelope.Envelope[models.Terrain], int](t).
+	ts.IntegrationTesterForComparableResults[m.SolverInput, int](t).
 		ProvideReader(reading.ReadWith(reader.TerrainReader)).
 		ProvideSolver(solver.CalculateDistance(solver.StartingPositionDistancePicker('S'))).
 		ProvideSolver(solver.CalculateDistance(solver.StartingPositionDistancePicker('S', 'a'))).

@@ -1,6 +1,6 @@
 package models
 
-import f "aoc/functional"
+import c "aoc/common"
 
 // Local type to denote a calculation step when calculating sizes of items in filesystem
 type calculation_mode = int
@@ -13,8 +13,8 @@ const (
 func CalculateItemSizes(root *Directory) map[Item]int64 {
 	size_mapping := make(map[Item]int64)
 
-	calculation_queue := []f.Pair[Item, calculation_mode]{
-		f.MakePair[Item](root, EXPLORE),
+	calculation_queue := []c.Pair[Item, calculation_mode]{
+		c.MakePair[Item](root, EXPLORE),
 	}
 
 	for len(calculation_queue) > 0 {
@@ -26,22 +26,22 @@ func CalculateItemSizes(root *Directory) map[Item]int64 {
 }
 
 func handleCalculationNode(
-	calculation_node f.Pair[Item, calculation_mode],
+	calculation_node c.Pair[Item, calculation_mode],
 	size_mapping map[Item]int64,
-) []f.Pair[Item, calculation_mode] {
-	next_calculation_nodes := []f.Pair[Item, calculation_mode]{}
+) []c.Pair[Item, calculation_mode] {
+	next_calculation_nodes := []c.Pair[Item, calculation_mode]{}
 	switch item := calculation_node.First.(type) {
 	case *File:
 		size_mapping[item] = int64(item.size)
 	case *Directory:
 		if calculation_node.Second == EXPLORE {
-			next_calculation_nodes = append(next_calculation_nodes, f.MakePair[Item](item, CALCULATE))
-			next_calculation_nodes = append(next_calculation_nodes, f.Zip(
+			next_calculation_nodes = append(next_calculation_nodes, c.MakePair[Item](item, CALCULATE))
+			next_calculation_nodes = append(next_calculation_nodes, c.Zip(
 				item.GetItems(),
-				f.Repeat(EXPLORE, len(item.items)),
+				c.Repeat(EXPLORE, len(item.items)),
 			)...)
 		} else {
-			size_mapping[item] = f.Sum(f.Map(func(i Item) int64 { return size_mapping[i] }, item.GetItems()))
+			size_mapping[item] = c.Sum(c.Map(func(i Item) int64 { return size_mapping[i] }, item.GetItems()))
 		}
 	}
 	return next_calculation_nodes

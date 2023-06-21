@@ -1,7 +1,7 @@
 package models
 
 import (
-	e "aoc/envelope"
+	c "aoc/common"
 	"fmt"
 )
 
@@ -23,10 +23,10 @@ func (envelope MovingPlanEnvelope) Get() MovingPlan {
 	return data
 }
 
-func CreateMovingPlanEnvelope(plan MovingPlan) e.Envelope[MovingPlan] {
+func CreateMovingPlanEnvelope(plan MovingPlan) c.Envelope[MovingPlan] {
 	return &MovingPlanEnvelope{plan}
 }
 
-func MovingPlanEnvelopeEqualityFunction(lhs, rhs e.Envelope[MovingPlan]) bool {
+func MovingPlanEnvelopeEqualityFunction(lhs, rhs c.Envelope[MovingPlan]) bool {
 	return MovingPlanEqualityFunction(lhs.Get(), rhs.Get())
 }

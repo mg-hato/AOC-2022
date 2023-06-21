@@ -1,6 +1,6 @@
 package solver
 
-import f "aoc/functional"
+import c "aoc/common"
 
 type scenic_score_tree_line_analyser struct {
 	scenic_scores map[position]int
@@ -11,7 +11,7 @@ func ScenicScoreTreeLineAnalyser() TreeLineAnalyser {
 }
 
 func (sstla *scenic_score_tree_line_analyser) analyseTreeLine(tree_line []tree) {
-	scenic_scores := f.Repeat(0, 10)
+	scenic_scores := c.Repeat(0, 10)
 
 	for i := 0; i < len(tree_line); i++ {
 		sstla.scenic_scores[tree_line[i].pos] *= scenic_scores[tree_line[i].height]
@@ -27,14 +27,12 @@ func (sstla *scenic_score_tree_line_analyser) analyseTreeLine(tree_line []tree) 
 }
 
 func (sstla scenic_score_tree_line_analyser) finishAndGetResult() int {
-	return f.Maximum(f.GetValues(sstla.scenic_scores), func(lhs, rhs int) bool {
-		return lhs < rhs
-	})
+	return c.Maximum(c.GetValues(sstla.scenic_scores))
 }
 
 func (sstla *scenic_score_tree_line_analyser) initialise(forest [][]tree) {
 	sstla.scenic_scores = make(map[position]int)
-	f.ForEach(func(t tree) {
+	c.ForEach(func(t tree) {
 		sstla.scenic_scores[t.pos] = 1
-	}, f.Flatten(forest))
+	}, c.Flatten(forest))
 }

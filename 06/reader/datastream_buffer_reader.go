@@ -1,7 +1,7 @@
 package reader
 
 import (
-	m "aoc/day06/models"
+	m "aoc/d06/models"
 	"aoc/reading"
 	"fmt"
 	"regexp"

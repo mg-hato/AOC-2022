@@ -1,7 +1,7 @@
 package solver
 
 import (
-	"aoc/day10/models"
+	"aoc/d10/models"
 	"sort"
 )
 

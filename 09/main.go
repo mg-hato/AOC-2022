@@ -2,13 +2,13 @@ package main
 
 import (
 	"aoc/argshandle"
-	"aoc/day09/reader"
-	"aoc/day09/solver"
+	"aoc/d09/reader"
+	"aoc/d09/solver"
 	"aoc/reading"
 )
 
 func main() {
-	argshandle.AoC2022DefaultProgram(
+	argshandle.Program(
 		reading.ReadWith(reader.MotionSeriesReader),
 		solver.CountPositionsVisitedByLastKnot(2),
 		solver.CountPositionsVisitedByLastKnot(10),

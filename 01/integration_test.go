@@ -1,18 +1,16 @@
 package main
 
 import (
-	m "aoc/day01/models"
-	r "aoc/day01/reader"
-	s "aoc/day01/solver"
-	e "aoc/envelope"
+	m "aoc/d01/models"
+	r "aoc/d01/reader"
+	s "aoc/d01/solver"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD01_IntegrationTest(t *testing.T) {
-	type Data = e.Envelope[m.CaloryList]
-	ts.IntegrationTesterForComparableResults[Data, int](t).
+	ts.IntegrationTesterForComparableResults[m.SolverInput, int](t).
 		ProvideReader(reading.ReadWith(r.CaloryListReader)).
 		ProvideSolver(s.CalorySumOfTop(1)).
 		ProvideSolver(s.CalorySumOfTop(3)).

@@ -1,18 +1,16 @@
 package main
 
 import (
-	"aoc/day04/models"
-	"aoc/day04/reader"
-	s "aoc/day04/solver"
-	"aoc/envelope"
+	m "aoc/d04/models"
+	"aoc/d04/reader"
+	s "aoc/d04/solver"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD04_IntegrationTest(t *testing.T) {
-	type Data = envelope.Envelope[[]models.SectionAssignmentPair]
-	ts.IntegrationTesterForComparableResults[Data, int](t).
+	ts.IntegrationTesterForComparableResults[m.SolverInput, int](t).
 		ProvideReader(reading.ReadWith(reader.SectionAssignmentsListReader)).
 		ProvideSolver(s.CountAssignmentPairs(s.IsFullOverlap)).
 		ProvideSolver(s.CountAssignmentPairs(s.IsPartialOverlap)).

@@ -4,16 +4,14 @@ import (
 	"aoc/d15/models"
 	"aoc/d15/reader"
 	"aoc/d15/solver"
-	"aoc/envelope"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD15_IntegrationTest(t *testing.T) {
-	type Data = envelope.Envelope[[]models.SensorReport]
 
-	ts.IntegrationTesterForComparableResults[Data, int64](t).
+	ts.IntegrationTesterForComparableResults[models.SolverInput, int64](t).
 		ProvideReader(reading.ReadWith(reader.SensorReportsReader)).
 		ProvideSolver(solver.BeaconExclusionCount(9)).
 		ProvideSolver(solver.BeaconExclusionCount(10)).

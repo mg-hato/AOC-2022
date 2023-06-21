@@ -1,6 +1,6 @@
 package solver
 
-import m "aoc/day03/models"
+import m "aoc/d03/models"
 
 type ItemLocator interface {
 	String() string

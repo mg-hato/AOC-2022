@@ -1,9 +1,8 @@
 package reader
 
 import (
-	m "aoc/day07/models"
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d07/models"
 	"aoc/reading"
 	"regexp"
 	"strconv"
@@ -31,7 +30,7 @@ type terminal_output_reader struct {
 }
 
 // Constructor function for section assignments list reader
-func TerminalOutputReader() reading.ReaderAoC2022[e.Envelope[[]m.Command]] {
+func TerminalOutputReader() reading.ReaderAoC2022[m.SolverInput] {
 	tor := &terminal_output_reader{
 		err: nil,
 
@@ -81,7 +80,7 @@ func (tor *terminal_output_reader) ProvideLine(line string) {
 	}
 }
 
-func (tor terminal_output_reader) FinishAndGetInputData() e.Envelope[[]m.Command] {
+func (tor terminal_output_reader) FinishAndGetInputData() m.SolverInput {
 	if tor.current_reading_mode == ls_command {
 		return m.CreateCommandsEnvelope(append(tor.commands, m.MakeCommandLs(tor.ls_items...))...)
 	} else {
@@ -137,7 +136,7 @@ func (tor *terminal_output_reader) processLsCommand(line string) {
 		item = m.MakeFile(file_match[2], size)
 	}
 
-	if f.Any(func(name string) bool { return name == item.GetName() }, f.Map(m.Item.GetName, tor.ls_items)) {
+	if c.Any(func(name string) bool { return name == item.GetName() }, c.Map(m.Item.GetName, tor.ls_items)) {
 		tor.err = duplicated_name_in_ls_items_listing(tor.line_number, item.GetName())
 		return
 	}

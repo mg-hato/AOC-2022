@@ -1,8 +1,7 @@
 package solver
 
 import (
-	m "aoc/day02/models"
-	e "aoc/envelope"
+	m "aoc/d02/models"
 	ts "aoc/testers"
 	"testing"
 )
@@ -16,7 +15,7 @@ func TestD02_SolverTest(t *testing.T) {
 	x, y, z := m.X, m.Y, m.Z
 	a, b, c := m.A, m.B, m.C
 
-	ts.SolverTesterForComparableResults[e.Envelope[[]m.Round], int](t).
+	ts.SolverTesterForComparableResults[m.SolverInput, int](t).
 		ProvideSolver(CalculateScore(ShapeBasedRoundInterpreter())).
 		ProvideSolver(CalculateScore(OutcomeBasedRoundInterpreter())).
 		AddTestCase(

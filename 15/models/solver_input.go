@@ -1,5 +1,5 @@
 package models
 
-import "aoc/envelope"
+import "aoc/common"
 
-type SolverInput = envelope.Envelope[[]SensorReport]
+type SolverInput = common.Envelope[[]SensorReport]

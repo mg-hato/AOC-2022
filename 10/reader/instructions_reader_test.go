@@ -1,7 +1,7 @@
 package reader
 
 import (
-	m "aoc/day10/models"
+	m "aoc/d10/models"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"

@@ -1,15 +1,15 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	"sort"
 )
 
-type Movement = f.Pair[int, int]
-type Position = f.Pair[int, int]
+type Movement = c.Pair[int, int]
+type Position = c.Pair[int, int]
 
 func Move(position Position, movement Movement) Position {
-	return f.MakePair(
+	return c.MakePair(
 		position.First+movement.First,
 		position.Second+movement.Second,
 	)
@@ -36,7 +36,7 @@ func Distance(x, y Position) int {
 //
 // i.e. maximum difference in each axis (First and Second) is 1
 func AreTouching(x, y Position) bool {
-	return f.InInclusiveRange(-1, 1)(x.First-y.First) && f.InInclusiveRange(-1, 1)(x.Second-y.Second)
+	return c.InInclusiveRange(-1, 1)(x.First-y.First) && c.InInclusiveRange(-1, 1)(x.Second-y.Second)
 }
 
 // Returns follower's new position
@@ -46,7 +46,7 @@ func FollowLeader(leader, follower Position) Position {
 		return follower
 	}
 
-	new_position_candidates := f.Map(
+	new_position_candidates := c.Map(
 		func(movement Movement) Position { return Move(follower, movement) },
 		[]Movement{
 			UP.AsMovement(), DOWN.AsMovement(),

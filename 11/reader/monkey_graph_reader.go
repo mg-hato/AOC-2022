@@ -1,9 +1,8 @@
 package reader
 
 import (
-	"aoc/day11/models"
-	"aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	"aoc/d11/models"
 	"aoc/reading"
 	"errors"
 	"fmt"
@@ -23,7 +22,7 @@ type monkey_graph_reader struct {
 }
 
 // Constructor of MonkeyGraphReader
-func MonkeyGraphReader() reading.ReaderAoC2022[envelope.Envelope[[]models.Monkey]] {
+func MonkeyGraphReader() reading.ReaderAoC2022[models.SolverInput] {
 	return &monkey_graph_reader{
 		line_readers: []line_reader{
 			createMonkeyIdentityLineReader(),
@@ -85,7 +84,7 @@ func (mgr *monkey_graph_reader) PerformFinalValidation() error {
 
 	// Ensure that each monkey passes items to another valid monkey (i.e. monkey in scope)
 	for id, monkey := range mgr.monkeys {
-		if !f.InRange(0, len(mgr.monkeys))(monkey.OnFalse) || !f.InRange(0, len(mgr.monkeys))(monkey.OnTrue) {
+		if !c.InRange(0, len(mgr.monkeys))(monkey.OnFalse) || !c.InRange(0, len(mgr.monkeys))(monkey.OnTrue) {
 			return fmt.Errorf("Error: Monkey %d can pass items to a monkey outside of the expected range [0, %d)", id, len(mgr.monkeys))
 		}
 	}
@@ -115,6 +114,6 @@ func (mgr *monkey_graph_reader) ProvideLine(line string) {
 	}
 }
 
-func (mgr *monkey_graph_reader) FinishAndGetInputData() envelope.Envelope[[]models.Monkey] {
+func (mgr *monkey_graph_reader) FinishAndGetInputData() models.SolverInput {
 	return models.CreateMonkeysEnvelopeWith(mgr.monkeys)
 }

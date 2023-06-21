@@ -1,16 +1,13 @@
 package reader
 
 import (
-	m "aoc/day02/models"
-	e "aoc/envelope"
+	m "aoc/d02/models"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD02_ReaderTest(t *testing.T) {
-
-	type Data = e.Envelope[[]m.Round]
 
 	// helper function
 	r := func(left m.LeftSymbol, right m.RightSymbol) m.Round { return m.Round{Left: left, Right: right} }
@@ -21,9 +18,9 @@ func TestD02_ReaderTest(t *testing.T) {
 
 	ts.ReaderTester(t, reading.ReadWith(StategyGuideReader)).
 		ProvideEqualityFunction(m.RoundsEnvelopeEqualityFunction).
-		AddTestCase("./tests/bad-input-1.txt", ts.ExpectError[Data]("empty")).
-		AddTestCase("./tests/bad-input-2.txt", ts.ExpectError[Data]("line #3", "B C")).
-		AddTestCase("./tests/bad-input-3.txt", ts.ExpectError[Data]("line #4", "1 0")).
+		AddTestCase("./tests/bad-input-1.txt", ts.ExpectError[m.SolverInput]("empty")).
+		AddTestCase("./tests/bad-input-2.txt", ts.ExpectError[m.SolverInput]("line #3", "B C")).
+		AddTestCase("./tests/bad-input-3.txt", ts.ExpectError[m.SolverInput]("line #4", "1 0")).
 		AddTestCase("./tests/input-1.txt",
 			ts.ExpectResult(m.CreateRoundsEnvelope([]m.Round{
 				r(a, z),

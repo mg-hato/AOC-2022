@@ -1,19 +1,17 @@
 package main
 
 import (
-	m "aoc/day10/models"
-	"aoc/day10/reader"
-	"aoc/day10/solver"
-	"aoc/envelope"
+	m "aoc/d10/models"
+	"aoc/d10/reader"
+	"aoc/d10/solver"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD10_IntegrationTest(t *testing.T) {
-	type Data = envelope.Envelope[[]m.Instruction]
 	type Result = m.AnalyserReport
-	ts.IntegrationTester[Data, Result](t).
+	ts.IntegrationTester[m.SolverInput, Result](t).
 		ProvideReader(reading.ReadWith(reader.InstructionsReader)).
 		ProvideSolver(solver.SimulateProgram(solver.SignalStrengthAnalyser(20, 60, 100, 140, 180, 220))).
 		ProvideSolver(solver.SimulateProgram(solver.ImageDrawerAnalyser(40, 6))).

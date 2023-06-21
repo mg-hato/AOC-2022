@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	"fmt"
 	"strings"
 )
@@ -15,13 +15,13 @@ func (mp MovingPlan) String() string {
 	return fmt.Sprintf(
 		"Plan{containers: [%s]; %v}",
 		strings.Join(
-			f.Map(func(c Containers) string { return fmt.Sprintf(`"%s"`, c) }, mp.StartingContainers),
+			c.Map(func(c Containers) string { return fmt.Sprintf(`"%s"`, c) }, mp.StartingContainers),
 			", ",
 		), mp.Moves,
 	)
 }
 
 func MovingPlanEqualityFunction(lhs, rhs MovingPlan) bool {
-	return f.ArrayEqual(lhs.StartingContainers, rhs.StartingContainers) &&
-		f.ArrayEqual(lhs.Moves, rhs.Moves)
+	return c.ArrayEqual(lhs.StartingContainers, rhs.StartingContainers) &&
+		c.ArrayEqual(lhs.Moves, rhs.Moves)
 }

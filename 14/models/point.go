@@ -1,8 +1,8 @@
 package models
 
-import f "aoc/functional"
+import c "aoc/common"
 
-type Point = f.Pair[int, int]
+type Point = c.Pair[int, int]
 
 func MakePoint(column, depth int) Point {
 	return Point{

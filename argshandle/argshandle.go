@@ -1,24 +1,12 @@
 package argshandle
 
 import (
-	. "aoc/functional"
+	c "aoc/common"
 	"fmt"
 	"log"
 	"os"
 	"strings"
 )
-
-type configuration struct {
-	inputFilename   string
-	dispalyHelp     bool
-	useSecondSolver bool
-}
-
-type argumentOption struct {
-	parameters  []string
-	description string
-	handler     func(*int, *configuration, []string)
-}
 
 // Handle provided arguments.
 // If provided arguments define executable configuration, input will be read from a specified file.
@@ -37,60 +25,57 @@ func HandleArgumentsAndExecute[IN any, OUT any](
 	// Starting configuration for the app execution
 	conf := configuration{}
 
-	// Options registered
-	supportedArgumentOptions := []argumentOption{
-		{
-			parameters:  []string{"-h", "--h", "-help", "--help"},
-			description: "Print help in console",
-			handler:     func(_ *int, c *configuration, _ []string) { c.dispalyHelp = true },
-		},
-		{
-			parameters:  []string{"--i", "-i", "--input", "--f", "-f", "--file"},
-			description: "Set the input file",
-			handler: func(i *int, c *configuration, args []string) {
-				*i = *i + 1
-				if *i < len(args) {
-					c.inputFilename = args[*i]
-				}
-			},
-		},
-		{
-			parameters:  []string{"--a", "-a", "--solver2"},
-			description: "Use second solver",
-			handler:     func(i *int, c *configuration, s []string) { c.useSecondSolver = true },
-		},
-	}
-	mapping := getParameterToArgOptionMapping(supportedArgumentOptions)
+	supported_argument_options := getSupportedArgumentOptions()
 
-	// process all parameters
+	argument_to_argument_option := c.CreateKeyValueMap(
+		c.FlatMap(
+			func(option argument_option) []c.Pair[string, argument_option] {
+				return c.Map(
+					func(keyword string) c.Pair[string, argument_option] { return c.MakePair(keyword, option) },
+					option.argument_keywords,
+				)
+			},
+			supported_argument_options,
+		),
+		c.GetFirst[string, argument_option],
+		c.GetSecond[string, argument_option],
+	)
+
+	// process all arguments
 	var i int = 1
 	for i < len(arguments) {
-		if o, ok := mapping[arguments[i]]; ok {
-			o.handler(&i, &conf, arguments)
+		if !c.MapContains[string, argument_option](arguments[i])(argument_to_argument_option) {
+			return false, invalid_argument_error(arguments[i])
+		} else if err := argument_to_argument_option[arguments[i]].handler(&i, &conf, arguments); err != nil {
+			return false, err
 		}
 		i++
 	}
 
-	// If input filename is not provided or display-help flag is set, display help and return
-	if conf.inputFilename == "" || conf.dispalyHelp {
-		displayHelp(supportedArgumentOptions)
+	// If display-help flag is set, display help and return
+	if conf.display_help_flag {
+		display_help(supported_argument_options)
 		return false, nil
 	}
 
+	if conf.input_filename == "" {
+		return false, input_file_not_provided_error()
+	}
+
 	// try to read the input
-	input, e := readInput(conf.inputFilename)
+	input, e := readInput(conf.input_filename)
 	if e != nil {
 		return false, e
 	}
 
-	// At this point, input is successfully retrieved. Close the file.
-	// Select solver based on configuration inferred
-	selectedSolver := solver1
-	if conf.useSecondSolver {
-		selectedSolver = solver2
+	// At this point, input is successfully retrieved.
+	// Select solver based on configuration inferred from arguments
+	selected_solver := solver1
+	if conf.use_second_solver {
+		selected_solver = solver2
 	}
 
-	solution, e := selectedSolver(input)
+	solution, e := selected_solver(input)
 	if e != nil {
 		return false, e
 	}
@@ -101,9 +86,9 @@ func HandleArgumentsAndExecute[IN any, OUT any](
 	return true, nil
 }
 
-// `AoC2022DefaultProgram` is usually how a program will be executed
+// `Program` is usually how a program will be executed
 // for any of the Advent of Code 2022 problems
-func AoC2022DefaultProgram[IN any, OUT any](
+func Program[IN any, OUT any](
 	reader func(string) (IN, error),
 	solver1 func(IN) (OUT, error),
 	solver2 func(IN) (OUT, error),
@@ -121,24 +106,19 @@ func AoC2022DefaultProgram[IN any, OUT any](
 	}
 }
 
-// Convert array of `argumentOption` into mapping: (parameter) => argumentOption
-func getParameterToArgOptionMapping(argOpts []argumentOption) map[string]argumentOption {
-	mapping := make(map[string]argumentOption)
-	for _, argOpt := range argOpts {
-		for _, parameter := range argOpt.parameters {
-			mapping[parameter] = argOpt
-		}
-	}
-	return mapping
-}
-
-func displayHelp(argumentOptions []argumentOption) {
-	paramsToPrint := Map(func(ao argumentOption) string {
-		return strings.Join(ao.parameters, ", ")
-	}, argumentOptions)
+func display_help(argument_options []argument_option) {
+	params_to_print := c.Map(
+		func(ao argument_option) string {
+			return strings.Join(ao.argument_keywords, ", ")
+		},
+		argument_options,
+	)
 
 	// find maximum length among `paramsToPrint`
-	maxLength := len(Maximum(paramsToPrint, func(lhs, rhs string) bool { return len(lhs) < len(rhs) }))
+	max_length := len(c.MaximumBy(
+		params_to_print,
+		func(lhs, rhs string) bool { return len(lhs) < len(rhs) },
+	))
 
 	// padding = distance in ' ' between options & descriptions
 	var padding int = 5
@@ -147,11 +127,17 @@ func displayHelp(argumentOptions []argumentOption) {
 	var margin int = 3
 	var margin_str string = strings.Repeat(" ", margin)
 
-	ForEach(
-		func(pair Pair[string, argumentOption]) {
-			gap := maxLength - len(pair.First)
-			fmt.Printf("%s%s%s%s\n", margin_str, pair.First, strings.Repeat(" ", padding+gap), pair.Second.description)
+	c.ForEach(
+		func(pair c.Pair[string, argument_option]) {
+			gap := max_length - len(pair.First)
+			fmt.Printf(
+				"%s%s%s%s\n",
+				margin_str,
+				pair.First,
+				strings.Repeat(" ", padding+gap),
+				pair.Second.description,
+			)
 		},
-		Zip(paramsToPrint, argumentOptions),
+		c.Zip(params_to_print, argument_options),
 	)
 }

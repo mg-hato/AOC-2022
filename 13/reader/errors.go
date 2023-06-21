@@ -1,8 +1,8 @@
 package reader
 
 import (
+	c "aoc/common"
 	m "aoc/d13/models"
-	f "aoc/functional"
 	"fmt"
 	"strings"
 )
@@ -78,7 +78,7 @@ func invalid_successor_token_parser_error(
 		`%s: after previous sequence of tokens "%s" the expected token was %s, but the actual token is "%s"`,
 		parsing_error_prefix(line_number),
 		strings.Join(previous_tokens, ""),
-		strings.Join(f.Map(get_token_type_name, expected_token_types), " or "),
+		strings.Join(c.Map(get_token_type_name, expected_token_types), " or "),
 		token,
 	)
 }

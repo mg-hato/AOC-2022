@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	argshandle.AoC2022DefaultProgram(
+	argshandle.Program(
 		reading.ReadWith(reader.RockStructureReader),
 		solver.CountSandUnitsUntilStop(solver.DefaultCaveSystemWithAbyss),
 		solver.CountSandUnitsUntilStop(solver.DefaultCaveSystemWithFloor),

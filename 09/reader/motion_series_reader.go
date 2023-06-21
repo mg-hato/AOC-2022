@@ -1,8 +1,7 @@
 package reader
 
 import (
-	m "aoc/day09/models"
-	"aoc/envelope"
+	m "aoc/d09/models"
 	"aoc/reading"
 	"fmt"
 	"regexp"
@@ -17,7 +16,7 @@ type motion_series_reader struct {
 	line_number   int
 }
 
-func MotionSeriesReader() reading.ReaderAoC2022[envelope.Envelope[m.MotionSeries]] {
+func MotionSeriesReader() reading.ReaderAoC2022[m.SolverInput] {
 	return &motion_series_reader{
 		motion_series: make(m.MotionSeries, 0),
 		move_re:       regexp.MustCompile(`^ *([RLUD]) +([1-9]\d*) *$`),
@@ -56,6 +55,6 @@ func (msr *motion_series_reader) ProvideLine(line string) {
 	msr.motion_series = append(msr.motion_series, m.MakeMotion(steps, direction))
 }
 
-func (msr *motion_series_reader) FinishAndGetInputData() envelope.Envelope[m.MotionSeries] {
+func (msr *motion_series_reader) FinishAndGetInputData() m.SolverInput {
 	return m.MotionSeriesEnvelope(msr.motion_series)
 }

@@ -1,19 +1,17 @@
 package main
 
 import (
-	"aoc/day07/models"
-	"aoc/day07/reader"
-	s "aoc/day07/solver"
-	"aoc/envelope"
+	m "aoc/d07/models"
+	"aoc/d07/reader"
+	s "aoc/d07/solver"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD07_IntegrationTest(t *testing.T) {
-	type Data = envelope.Envelope[[]models.Command]
 	spec := s.SimpleFilesystemSpec(70_000_000, 30_000_000)
-	ts.IntegrationTesterForComparableResults[Data, int64](t).
+	ts.IntegrationTesterForComparableResults[m.SolverInput, int64](t).
 		ProvideReader(reading.ReadWith(reader.TerminalOutputReader)).
 		ProvideSolver(s.AnalyseFilesystem(spec, s.SumDirectoriesOfSizeAtMost(100_000))).
 		ProvideSolver(s.AnalyseFilesystem(spec, s.FindSmallestDirectoryEnablingUpdate())).

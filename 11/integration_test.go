@@ -1,17 +1,16 @@
 package main
 
 import (
-	m "aoc/day11/models"
-	r "aoc/day11/reader"
-	s "aoc/day11/solver"
-	e "aoc/envelope"
+	m "aoc/d11/models"
+	r "aoc/d11/reader"
+	s "aoc/d11/solver"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD11_IntegrationTest(t *testing.T) {
-	ts.IntegrationTesterForComparableResults[e.Envelope[[]m.Monkey], int64](t).
+	ts.IntegrationTesterForComparableResults[m.SolverInput, int64](t).
 		ProvideReader(reading.ReadWith(r.MonkeyGraphReader)).
 		ProvideSolver(s.CalculateMonkeyBusiness(20, s.DivBy3)).
 		ProvideSolver(s.CalculateMonkeyBusiness(10_000, s.NoAdjustment)).

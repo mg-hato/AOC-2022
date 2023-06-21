@@ -1,18 +1,16 @@
 package main
 
 import (
-	m "aoc/day02/models"
-	"aoc/day02/reader"
-	"aoc/day02/solver"
-	e "aoc/envelope"
+	m "aoc/d02/models"
+	"aoc/d02/reader"
+	"aoc/d02/solver"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD02_IntegrationTest(t *testing.T) {
-	type Data = e.Envelope[[]m.Round]
-	ts.IntegrationTesterForComparableResults[Data, int](t).
+	ts.IntegrationTesterForComparableResults[m.SolverInput, int](t).
 		ProvideReader(reading.ReadWith(reader.StategyGuideReader)).
 		ProvideSolver(solver.CalculateScore(solver.ShapeBasedRoundInterpreter())).
 		ProvideSolver(solver.CalculateScore(solver.OutcomeBasedRoundInterpreter())).

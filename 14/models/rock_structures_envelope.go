@@ -1,13 +1,12 @@
 package models
 
 import (
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
 )
 
-func RockStructureEnvelope(rock_structures []RockStructure) e.Envelope[[]RockStructure] {
+func RockStructureEnvelope(rock_structures []RockStructure) c.Envelope[[]RockStructure] {
 	return rock_structures_envelope{
-		f.Filter(func(rs RockStructure) bool { return len(rs) > 0 }, rock_structures),
+		c.Filter(func(rs RockStructure) bool { return len(rs) > 0 }, rock_structures),
 	}
 }
 
@@ -16,12 +15,12 @@ type rock_structures_envelope struct {
 }
 
 func (eee rock_structures_envelope) Get() []RockStructure {
-	return f.Map(
-		func(rs RockStructure) RockStructure { return f.Map(f.Identity[f.Pair[int, int]], rs) },
+	return c.Map(
+		func(rs RockStructure) RockStructure { return c.Map(c.Identity[c.Pair[int, int]], rs) },
 		eee.rock_structures,
 	)
 }
 
-func RockStructureEnvelopeEqualityFunction(lhs, rhs e.Envelope[[]RockStructure]) bool {
-	return f.ArrayEqualWith(f.ArrayEqual[f.Pair[int, int]])(lhs.Get(), rhs.Get())
+func RockStructureEnvelopeEqualityFunction(lhs, rhs c.Envelope[[]RockStructure]) bool {
+	return c.ArrayEqualWith(c.ArrayEqual[c.Pair[int, int]])(lhs.Get(), rhs.Get())
 }
