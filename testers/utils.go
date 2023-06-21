@@ -1,7 +1,6 @@
 package testers
 
 import (
-	f "aoc/functional"
 	"fmt"
 	"strings"
 )
@@ -18,11 +17,9 @@ func format_with_prefix(prefix, message string) string {
 
 // Formats array of strings
 func format_string_array(keywords []string) string {
-	comma_separated_keywords := strings.Join(
-		f.Map(
-			func(keyword string) string { return fmt.Sprintf(`"%s"`, keyword) },
-			keywords,
-		), ", ",
-	)
-	return fmt.Sprintf("[%s]", comma_separated_keywords)
+	formatted_keywords := make([]string, len(keywords))
+	for i := 0; i < len(keywords); i++ {
+		formatted_keywords[i] = fmt.Sprintf(`"%s"`, keywords[i])
+	}
+	return fmt.Sprintf("[%s]", strings.Join(formatted_keywords, ", "))
 }

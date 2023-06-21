@@ -5,6 +5,10 @@
 			"path": "argshandle"
 		},
 		{
+			"name": "common",
+			"path": "common"
+		},
+		{
 			"path": "envelope",
 			"name": "envelope",
 		},
