@@ -85,7 +85,7 @@ func (mgr *monkey_graph_reader) PerformFinalValidation() error {
 
 	// Ensure that each monkey passes items to another valid monkey (i.e. monkey in scope)
 	for id, monkey := range mgr.monkeys {
-		if !f.InRange(monkey.OnFalse, 0, len(mgr.monkeys)) || !f.InRange(monkey.OnTrue, 0, len(mgr.monkeys)) {
+		if !f.InRange(0, len(mgr.monkeys))(monkey.OnFalse) || !f.InRange(0, len(mgr.monkeys))(monkey.OnTrue) {
 			return fmt.Errorf("Error: Monkey %d can pass items to a monkey outside of the expected range [0, %d)", id, len(mgr.monkeys))
 		}
 	}

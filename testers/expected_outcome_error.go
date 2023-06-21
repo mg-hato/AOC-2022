@@ -1,7 +1,6 @@
 package testers
 
 import (
-	f "aoc/functional"
 	"fmt"
 	"strings"
 	"testing"
@@ -39,12 +38,13 @@ func (ee expect_error[T]) testOutcome(t *testing.T, eq_func func(T, T) bool, res
 
 func (ee expect_error[T]) assertThatErrorContainsKeywords(t *testing.T, err error) {
 	err_msg_lowercase := strings.ToLower(err.Error())
-	missing_keywords := f.Filter(
-		func(keyword string) bool {
-			return !strings.Contains(err_msg_lowercase, strings.ToLower(keyword))
-		},
-		ee.keywords,
-	)
+	missing_keywords := make([]string, 0)
+	for _, keyword := range ee.keywords {
+		if !strings.Contains(err_msg_lowercase, strings.ToLower(keyword)) {
+			missing_keywords = append(missing_keywords, keyword)
+		}
+	}
+
 	if len(missing_keywords) > 0 {
 		t.Error(format_with_prefix(ee.prefix,
 			fmt.Sprintf(
