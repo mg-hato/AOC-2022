@@ -1,8 +1,7 @@
 package reader
 
 import (
-	m "aoc/day03/models"
-	e "aoc/envelope"
+	m "aoc/d03/models"
 	"aoc/reading"
 	"fmt"
 	"regexp"
@@ -19,7 +18,7 @@ type rucksacks_reader struct {
 }
 
 // Constructor function for rucksacks reader
-func RucksacksReader() reading.ReaderAoC2022[e.Envelope[[]m.Rucksack]] {
+func RucksacksReader() reading.ReaderAoC2022[m.SolverInput] {
 	return &rucksacks_reader{
 		err: nil,
 
@@ -73,6 +72,6 @@ func (rr *rucksacks_reader) ProvideLine(line string) {
 	rr.rucksacks = append(rr.rucksacks, matches[1])
 }
 
-func (rr rucksacks_reader) FinishAndGetInputData() e.Envelope[[]m.Rucksack] {
+func (rr rucksacks_reader) FinishAndGetInputData() m.SolverInput {
 	return m.CreateRucksacksEnvelope(rr.rucksacks)
 }

@@ -1,11 +1,11 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	"fmt"
 )
 
-type Point = f.Pair[int, int]
+type Point = c.Pair[int, int]
 
 func Abs(i int) int {
 	if i >= 0 {

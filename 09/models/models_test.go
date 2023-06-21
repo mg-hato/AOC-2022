@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	ts "aoc/testers"
 	"testing"
 )
@@ -23,11 +23,11 @@ func TestD09_Envelope(t *testing.T) {
 	series := envelope.Get()
 	series[0] = MakeMotion(7, LEFT)
 
-	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), f.ArrayEqual[Motion])
+	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), c.ArrayEqual[Motion])
 }
 
 func TestD09_Distance(t *testing.T) {
-	p := f.MakePair[int, int]
+	p := c.MakePair[int, int]
 	ts.AssertEqual(t, Distance(p(10, 20), p(20, 10)), 20)
 	ts.AssertEqual(t, Distance(p(-100, 256), p(100, 255)), 201)
 	ts.AssertEqual(t, Distance(p(0, 0), p(10, 0)), 10)
@@ -36,7 +36,7 @@ func TestD09_Distance(t *testing.T) {
 }
 
 func TestD09_FollowLeader(t *testing.T) {
-	p := f.MakePair[int, int]
+	p := c.MakePair[int, int]
 
 	// No movement expected for the following
 	ts.AssertEqual(t, FollowLeader(p(15, 10), p(15, 10)), p(15, 10))

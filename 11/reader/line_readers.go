@@ -1,8 +1,8 @@
 package reader
 
 import (
-	m "aoc/day11/models"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d11/models"
 	"errors"
 	"fmt"
 	"regexp"
@@ -42,14 +42,14 @@ type monkey_starting_items_line_reader struct {
 
 func (reader monkey_starting_items_line_reader) ProcessLine(line string, monkey *m.Monkey) error {
 	if submatches := reader.monkey_starting_items_re.FindStringSubmatch(line); len(submatches) == 2 {
-		monkey.Items = f.Map(
+		monkey.Items = c.Map(
 			func(s string) int {
 				i, _ := strconv.Atoi(s)
 				return i
 			},
-			f.Filter(
+			c.Filter(
 				func(s string) bool { return len(s) > 0 },
-				f.Map(strings.TrimSpace, strings.Split(submatches[1], ",")),
+				c.Map(strings.TrimSpace, strings.Split(submatches[1], ",")),
 			),
 		)
 		return nil

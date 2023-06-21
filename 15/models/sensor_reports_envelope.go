@@ -1,22 +1,21 @@
 package models
 
 import (
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
 )
 
 type sensor_reports_envelope struct {
 	reports []SensorReport
 }
 
-func SensorReportsEnvelope(reports ...SensorReport) e.Envelope[[]SensorReport] {
+func SensorReportsEnvelope(reports ...SensorReport) c.Envelope[[]SensorReport] {
 	return sensor_reports_envelope{reports}
 }
 
 func (env sensor_reports_envelope) Get() []SensorReport {
-	return f.Map(f.Identity[SensorReport], env.reports)
+	return c.Map(c.Identity[SensorReport], env.reports)
 }
 
-func SensorReportsEnvelopeEqualityFunction(lhs, rhs e.Envelope[[]SensorReport]) bool {
-	return f.ArrayEqual[SensorReport](lhs.Get(), rhs.Get())
+func SensorReportsEnvelopeEqualityFunction(lhs, rhs c.Envelope[[]SensorReport]) bool {
+	return c.ArrayEqual[SensorReport](lhs.Get(), rhs.Get())
 }

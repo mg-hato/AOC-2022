@@ -1,18 +1,16 @@
 package main
 
 import (
-	"aoc/day03/models"
-	"aoc/day03/reader"
-	"aoc/day03/solver"
-	"aoc/envelope"
+	m "aoc/d03/models"
+	"aoc/d03/reader"
+	"aoc/d03/solver"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD03_IntegrationTest(t *testing.T) {
-	type Data = envelope.Envelope[[]models.Rucksack]
-	ts.IntegrationTesterForComparableResults[Data, int](t).
+	ts.IntegrationTesterForComparableResults[m.SolverInput, int](t).
 		ProvideReader(reading.ReadWith(reader.RucksacksReader)).
 		ProvideSolver(solver.SumItemPriorities(solver.CompartmentDuplicateItemLocator())).
 		ProvideSolver(solver.SumItemPriorities(solver.BadgeItemLocator())).

@@ -1,8 +1,7 @@
 package models
 
 import (
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
 )
 
 type CommandsEnvelope struct {
@@ -10,13 +9,13 @@ type CommandsEnvelope struct {
 }
 
 func (ce CommandsEnvelope) Get() []Command {
-	return f.Map(Command.Copy, ce.commands)
+	return c.Map(Command.Copy, ce.commands)
 }
 
-func CreateCommandsEnvelope(commands ...Command) e.Envelope[[]Command] {
+func CreateCommandsEnvelope(commands ...Command) c.Envelope[[]Command] {
 	return CommandsEnvelope{commands}
 }
 
-func CommandsEnvelopeEqualityFunction(lhs, rhs e.Envelope[[]Command]) bool {
-	return f.ArrayEqualWith(CommandEqualityFunc)(lhs.Get(), rhs.Get())
+func CommandsEnvelopeEqualityFunction(lhs, rhs c.Envelope[[]Command]) bool {
+	return c.ArrayEqualWith(CommandEqualityFunc)(lhs.Get(), rhs.Get())
 }

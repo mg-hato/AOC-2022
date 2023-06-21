@@ -1,8 +1,8 @@
 package solver
 
 import (
-	"aoc/day05/models"
-	f "aoc/functional"
+	c "aoc/common"
+	"aoc/d05/models"
 )
 
 type crate_mover_9000 struct{}
@@ -20,7 +20,7 @@ func (crate_mover_9000) ExecuteMove(stacks []models.Containers, move models.Move
 	if len(stacks[source]) < move.Quantity {
 		return false
 	}
-	stacks[destination] += string(f.Reverse([]rune(stacks[source][len(stacks[source])-move.Quantity:])))
+	stacks[destination] += string(c.Reverse([]rune(stacks[source][len(stacks[source])-move.Quantity:])))
 	stacks[source] = stacks[source][:len(stacks[source])-move.Quantity]
 	return true
 }

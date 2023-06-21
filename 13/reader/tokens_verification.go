@@ -1,7 +1,7 @@
 package reader
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	"regexp"
 )
 
@@ -53,7 +53,7 @@ func verify_successor_tokens(line_number int, tokens []string) error {
 	}
 	for i := 1; i < len(tokens); i++ {
 		previous_token, token := tokens[i-1], tokens[i]
-		if !f.ArrayContains(next_expected_token_types(previous_token), get_token_type(token)) {
+		if !c.ArrayContains(next_expected_token_types(previous_token), get_token_type(token)) {
 			return invalid_successor_token_parser_error(
 				line_number,
 				tokens[:i],
@@ -73,7 +73,7 @@ func verify_last_token(line_number int, tokens []string) error {
 }
 
 func verify_number_tokens(line_number int, tokens []string) error {
-	number_tokens := f.Filter(func(token string) bool { return get_token_type(token) == number }, tokens)
+	number_tokens := c.Filter(func(token string) bool { return get_token_type(token) == number }, tokens)
 	valid_number_token_re := regexp.MustCompile(`^(?:0|[1-9]\d*)$`)
 	for _, token := range number_tokens {
 		if !valid_number_token_re.MatchString(token) {
@@ -85,7 +85,7 @@ func verify_number_tokens(line_number int, tokens []string) error {
 
 func verify_bracket_closures(line_number int, tokens []string) error {
 	var bracket_level int = 0
-	for _, token := range f.Filter(func(s string) bool { return s == "[" || s == "]" }, tokens) {
+	for _, token := range c.Filter(func(s string) bool { return s == "[" || s == "]" }, tokens) {
 		switch token {
 		case "[":
 			bracket_level++
@@ -105,7 +105,7 @@ func verify_bracket_closures(line_number int, tokens []string) error {
 
 func verify_packet_count(line_number int, tokens []string) error {
 	var packet_count, bracket_level int = 0, 0
-	for _, token := range f.Filter(func(s string) bool { return s == "[" || s == "]" }, tokens) {
+	for _, token := range c.Filter(func(s string) bool { return s == "[" || s == "]" }, tokens) {
 
 		switch token {
 		case "[":

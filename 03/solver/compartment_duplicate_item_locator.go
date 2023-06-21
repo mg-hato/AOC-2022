@@ -1,8 +1,8 @@
 package solver
 
 import (
-	m "aoc/day03/models"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d03/models"
 	"fmt"
 )
 
@@ -19,13 +19,13 @@ func (compartment_duplicate_item_locator) String() string {
 
 func (compartment_duplicate_item_locator) locateItems(rucksacks []m.Rucksack) ([]rune, error) {
 	// split each rucksack into its two compartments and find any common items
-	repeating_item_candidates := f.Map(func(r m.Rucksack) []rune {
+	repeating_item_candidates := c.Map(func(r m.Rucksack) []rune {
 		mid := len(r) / 2
 		return find_common_items(r[:mid], r[mid:])
 	}, rucksacks)
 
 	// we expect exactly one item to be duplicate between both compartments, if that is not the case return with error
-	if idx := f.IndexOf(repeating_item_candidates, func(items []rune) bool { return len(items) != 1 }); idx != -1 {
+	if idx := c.IndexOf(repeating_item_candidates, func(items []rune) bool { return len(items) != 1 }); idx != -1 {
 		prefix := fmt.Sprintf("Error while locating repeating items in compartments of rucksack #%d", idx+1)
 		if len(repeating_item_candidates[idx]) == 0 {
 			return nil, fmt.Errorf("%s: no repeating items", prefix)
@@ -37,5 +37,5 @@ func (compartment_duplicate_item_locator) locateItems(rucksacks []m.Rucksack) ([
 		}
 	}
 	// All ok: for each rucksack extract the repeating item
-	return f.Map(func(repeating_item []rune) rune { return repeating_item[0] }, repeating_item_candidates), nil
+	return c.Map(func(repeating_item []rune) rune { return repeating_item[0] }, repeating_item_candidates), nil
 }

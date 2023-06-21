@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	ts "aoc/testers"
 	"testing"
 )
@@ -22,7 +22,7 @@ func TestD10_Envelope(t *testing.T) {
 	instructions[0] = Noop()
 	instructions[1] = Addx(5)
 
-	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), f.ArrayEqualWith(InstructionEqualityFunction))
+	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), c.ArrayEqualWith(InstructionEqualityFunction))
 }
 
 func TestD10_Instructions(t *testing.T) {

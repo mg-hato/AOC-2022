@@ -1,6 +1,6 @@
 package models
 
-import f "aoc/functional"
+import c "aoc/common"
 
 type RockStructure = []Point
 
@@ -30,12 +30,12 @@ func GetRockPoints(rock_structures []RockStructure) []Point {
 	rocks := map[Point]bool{}
 	for _, rock_structure := range rock_structures {
 		for i := 1; i < len(rock_structure); i++ {
-			f.ForEach(
+			c.ForEach(
 				func(p Point) { rocks[p] = true },
 				connect_points(rock_structure[i-1], rock_structure[i]),
 			)
 		}
 	}
 
-	return f.GetKeys(rocks)
+	return c.GetKeys(rocks)
 }

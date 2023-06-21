@@ -1,8 +1,7 @@
 package models
 
 import (
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
 )
 
 type instructions_envelope struct {
@@ -10,13 +9,13 @@ type instructions_envelope struct {
 }
 
 func (envelope instructions_envelope) Get() []Instruction {
-	return f.Map(f.Identity[Instruction], envelope.instructions)
+	return c.Map(c.Identity[Instruction], envelope.instructions)
 }
 
-func InstructionsEnvelope(instructions []Instruction) e.Envelope[[]Instruction] {
+func InstructionsEnvelope(instructions []Instruction) c.Envelope[[]Instruction] {
 	return instructions_envelope{instructions}
 }
 
-func InstructionsEnvelopeEqualityFunction(lhs, rhs e.Envelope[[]Instruction]) bool {
-	return f.ArrayEqualWith(InstructionEqualityFunction)(lhs.Get(), rhs.Get())
+func InstructionsEnvelopeEqualityFunction(lhs, rhs c.Envelope[[]Instruction]) bool {
+	return c.ArrayEqualWith(InstructionEqualityFunction)(lhs.Get(), rhs.Get())
 }

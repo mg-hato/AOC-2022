@@ -1,8 +1,8 @@
 package solver
 
 import (
-	m "aoc/day03/models"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d03/models"
 	"fmt"
 )
 
@@ -19,7 +19,7 @@ func (badge_item_locator) String() string {
 
 func (badge_item_locator) locateItems(rucksacks []m.Rucksack) ([]rune, error) {
 	// group rucksacks into groups of 3 and find any repeating items among each group (i.e. badge candidates)
-	badge_candidates := f.Map(
+	badge_candidates := c.Map(
 		func(groupIndex int) []rune {
 			return find_common_items(
 				rucksacks[3*groupIndex],
@@ -27,11 +27,11 @@ func (badge_item_locator) locateItems(rucksacks []m.Rucksack) ([]rune, error) {
 				rucksacks[3*groupIndex+2],
 			)
 		},
-		f.Range(0, len(rucksacks)/3),
+		c.Range(0, len(rucksacks)/3),
 	)
 
 	// ensure that each group has exactly one badge, if not return with error
-	if idx := f.IndexOf(badge_candidates, func(items []rune) bool { return len(items) != 1 }); idx != -1 {
+	if idx := c.IndexOf(badge_candidates, func(items []rune) bool { return len(items) != 1 }); idx != -1 {
 		prefix := fmt.Sprintf(
 			"Error while locating badges for rucksack group #%d (rucksacks %d-%d)",
 			idx+1, 3*idx+1, 3*idx+3,
@@ -43,5 +43,5 @@ func (badge_item_locator) locateItems(rucksacks []m.Rucksack) ([]rune, error) {
 		}
 	}
 	// All ok: for each group extract the badge
-	return f.Map(func(badge []rune) rune { return badge[0] }, badge_candidates), nil
+	return c.Map(func(badge []rune) rune { return badge[0] }, badge_candidates), nil
 }

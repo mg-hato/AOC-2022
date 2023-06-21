@@ -1,8 +1,8 @@
 package solver
 
 import (
-	m "aoc/day05/models"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d05/models"
 	"fmt"
 )
 
@@ -14,9 +14,9 @@ func not_enough_containers_error(move_number int, move m.Move) error {
 }
 
 func empty_stacks_error(stacks []m.Containers) error {
-	empty_stacks_ids := f.Map(f.GetFirst[int, m.Containers], f.Filter(
-		func(pair f.Pair[int, m.Containers]) bool { return len(pair.Second) == 0 },
-		f.EnumerateWithFirstIndex(stacks, 1),
+	empty_stacks_ids := c.Map(c.GetFirst[int, m.Containers], c.Filter(
+		func(pair c.Pair[int, m.Containers]) bool { return len(pair.Second) == 0 },
+		c.EnumerateWithFirstIndex[string](1)(stacks),
 	))
 	return fmt.Errorf(
 		"error following the moving plan: the following stacks have no containers %v",

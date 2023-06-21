@@ -1,8 +1,8 @@
 package solver
 
 import (
-	m "aoc/day07/models"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d07/models"
 	"fmt"
 	"sort"
 )
@@ -31,7 +31,7 @@ func (analyser find_smallest_directory_enabling_update_analyser) AnalyseAndGetAn
 	}
 
 	missing_memory := spec.GetMemoryRequiredForUpdate() - free_memory
-	directories_sizes = f.Filter(func(size int64) bool { return size >= missing_memory }, directories_sizes)
+	directories_sizes = c.Filter(func(size int64) bool { return size >= missing_memory }, directories_sizes)
 	if len(directories_sizes) == 0 {
 		return 0, fmt.Errorf("error: could not find candidate directories for deletion")
 	}

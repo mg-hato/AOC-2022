@@ -1,8 +1,7 @@
 package reader
 
 import (
-	m "aoc/day01/models"
-	e "aoc/envelope"
+	m "aoc/d01/models"
 	"aoc/reading"
 	"errors"
 	"fmt"
@@ -21,7 +20,7 @@ type calory_list_reader struct {
 }
 
 // Constructor function for calory list reader
-func CaloryListReader() reading.ReaderAoC2022[e.Envelope[m.CaloryList]] {
+func CaloryListReader() reading.ReaderAoC2022[m.SolverInput] {
 	return &calory_list_reader{
 		err: nil,
 
@@ -72,6 +71,6 @@ func (clr *calory_list_reader) addCalory(calory int) {
 	}
 }
 
-func (clr calory_list_reader) FinishAndGetInputData() e.Envelope[m.CaloryList] {
+func (clr calory_list_reader) FinishAndGetInputData() m.SolverInput {
 	return m.CreateCaloryListEnvelope(clr.calory_list)
 }

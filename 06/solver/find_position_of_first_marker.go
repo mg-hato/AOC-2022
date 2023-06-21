@@ -1,7 +1,7 @@
 package solver
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	"errors"
 )
 
@@ -11,7 +11,7 @@ func FindPositionOfTheFirstMarker(n int) func(string) (int, error) {
 
 		fc := make_frequency_counter()
 		// Process first n
-		f.ForEach(fc.addElement, f.Take(n, []byte(datastream)))
+		c.ForEach(fc.addElement, c.Take(n, []byte(datastream)))
 
 		var i int = n
 		for {

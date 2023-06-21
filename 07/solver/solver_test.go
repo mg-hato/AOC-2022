@@ -1,16 +1,14 @@
 package solver
 
 import (
-	m "aoc/day07/models"
-	"aoc/envelope"
+	m "aoc/d07/models"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD07_SolverTest(t *testing.T) {
 	spec := SimpleFilesystemSpec(200, 100)
-	type Data = envelope.Envelope[[]m.Command]
-	ts.SolverTesterForComparableResults[Data, int64](t).
+	ts.SolverTesterForComparableResults[m.SolverInput, int64](t).
 		ProvideSolver(AnalyseFilesystem(spec, SumDirectoriesOfSizeAtMost(50))).
 		ProvideSolver(AnalyseFilesystem(spec, FindSmallestDirectoryEnablingUpdate())).
 		// Directories of size at most 50:

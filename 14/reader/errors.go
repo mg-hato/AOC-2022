@@ -1,7 +1,7 @@
 package reader
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	"fmt"
 )
 
@@ -30,7 +30,7 @@ func rock_structures_are_not_horizontal_or_vertical_error(rock_formation_number,
 	)
 }
 
-func rock_formation_overlaps_sand_source_error(rock_formation_number int, sand_source f.Pair[int, int]) error {
+func rock_formation_overlaps_sand_source_error(rock_formation_number int, sand_source c.Pair[int, int]) error {
 	return fmt.Errorf(
 		`%s: rock formation #%d overlaps the sand source (%d, %d)`,
 		finald_validation_error_prefix(),

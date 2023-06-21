@@ -1,8 +1,7 @@
 package reader
 
 import (
-	m "aoc/day02/models"
-	e "aoc/envelope"
+	m "aoc/d02/models"
 	"aoc/reading"
 	"errors"
 	"fmt"
@@ -24,7 +23,7 @@ type strategy_guide_reader struct {
 }
 
 // Constructor function for Strategy Guide Reader
-func StategyGuideReader() reading.ReaderAoC2022[e.Envelope[[]m.Round]] {
+func StategyGuideReader() reading.ReaderAoC2022[m.SolverInput] {
 	return &strategy_guide_reader{
 		err: nil,
 
@@ -80,6 +79,6 @@ func (sgr *strategy_guide_reader) ProvideLine(line string) {
 	}
 }
 
-func (sgr strategy_guide_reader) FinishAndGetInputData() e.Envelope[[]m.Round] {
+func (sgr strategy_guide_reader) FinishAndGetInputData() m.SolverInput {
 	return m.CreateRoundsEnvelope(sgr.rounds)
 }

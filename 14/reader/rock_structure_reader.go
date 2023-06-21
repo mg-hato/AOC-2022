@@ -1,18 +1,17 @@
 package reader
 
 import (
+	c "aoc/common"
 	m "aoc/d14/models"
-	e "aoc/envelope"
-	f "aoc/functional"
 	"aoc/reading"
 	"regexp"
 	"strconv"
 )
 
-func RockStructureReader() reading.ReaderAoC2022[e.Envelope[[]m.RockStructure]] {
+func RockStructureReader() reading.ReaderAoC2022[m.SolverInput] {
 	return &rock_structure_reader{
 
-		sand_source: f.MakePair(500, 0),
+		sand_source: c.MakePair(500, 0),
 
 		empty_re:     regexp.MustCompile("^ *$"),
 		rock_path_re: regexp.MustCompile(`^ *\d+ *, *\d+(?: *-> *\d+ *, *\d+)+$`),
@@ -26,7 +25,7 @@ type rock_structure_reader struct {
 
 	line_number int
 
-	sand_source f.Pair[int, int]
+	sand_source c.Pair[int, int]
 
 	rock_structures []m.RockStructure
 
@@ -62,11 +61,11 @@ func (rsr *rock_structure_reader) ProvideLine(line string) {
 	switch {
 	case rsr.empty_re.MatchString(line):
 	case rsr.rock_path_re.MatchString(line):
-		rock_structure := f.Map(
-			func(submatches []string) f.Pair[int, int] {
+		rock_structure := c.Map(
+			func(submatches []string) c.Pair[int, int] {
 				first, _ := strconv.Atoi(submatches[1])
 				second, _ := strconv.Atoi(submatches[2])
-				return f.MakePair(first, second)
+				return c.MakePair(first, second)
 			},
 			rsr.rock_path_coordinates_re.FindAllStringSubmatch(line, -1),
 		)
@@ -76,6 +75,6 @@ func (rsr *rock_structure_reader) ProvideLine(line string) {
 	}
 }
 
-func (rsr rock_structure_reader) FinishAndGetInputData() e.Envelope[[]m.RockStructure] {
+func (rsr rock_structure_reader) FinishAndGetInputData() m.SolverInput {
 	return m.RockStructureEnvelope(rsr.rock_structures)
 }

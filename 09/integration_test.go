@@ -1,17 +1,16 @@
 package main
 
 import (
-	"aoc/day09/models"
-	"aoc/day09/reader"
-	"aoc/day09/solver"
-	"aoc/envelope"
+	"aoc/d09/models"
+	"aoc/d09/reader"
+	"aoc/d09/solver"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD09_IntegrationTest(t *testing.T) {
-	ts.IntegrationTesterForComparableResults[envelope.Envelope[models.MotionSeries], int](t).
+	ts.IntegrationTesterForComparableResults[models.SolverInput, int](t).
 		ProvideReader(reading.ReadWith(reader.MotionSeriesReader)).
 		ProvideSolver(solver.CountPositionsVisitedByLastKnot(2)).
 		ProvideSolver(solver.CountPositionsVisitedByLastKnot(10)).

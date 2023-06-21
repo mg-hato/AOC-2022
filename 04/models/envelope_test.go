@@ -1,7 +1,7 @@
 package models
 
 import (
-	"aoc/functional"
+	c "aoc/common"
 	"aoc/testers"
 	"testing"
 )
@@ -15,6 +15,6 @@ func TestD04_EnvelopeTest(t *testing.T) {
 		t,
 		envelope.Get(),
 		[]SectionAssignmentPair{MakeSAP(1, 5, 10, 15), MakeSAP(7, 7, 7, 10)},
-		functional.ArrayEqual[SectionAssignmentPair],
+		c.ArrayEqual[SectionAssignmentPair],
 	)
 }

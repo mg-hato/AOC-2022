@@ -1,8 +1,7 @@
 package reader
 
 import (
-	m "aoc/day10/models"
-	e "aoc/envelope"
+	m "aoc/d10/models"
 	"aoc/reading"
 	"fmt"
 	"regexp"
@@ -19,7 +18,7 @@ type instructions_reader struct {
 	empty_re    *regexp.Regexp
 }
 
-func InstructionsReader() reading.ReaderAoC2022[e.Envelope[[]m.Instruction]] {
+func InstructionsReader() reading.ReaderAoC2022[m.SolverInput] {
 	return &instructions_reader{
 		noop_re:  regexp.MustCompile("^ *noop *$"),
 		addx_re:  regexp.MustCompile(`^ *addx +(0|-?[1-9]\d*) *$`),
@@ -55,6 +54,6 @@ func (ir *instructions_reader) ProvideLine(line string) {
 	}
 }
 
-func (ir *instructions_reader) FinishAndGetInputData() e.Envelope[[]m.Instruction] {
+func (ir *instructions_reader) FinishAndGetInputData() m.SolverInput {
 	return m.InstructionsEnvelope(ir.data)
 }

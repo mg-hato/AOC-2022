@@ -1,6 +1,6 @@
 package solver
 
-import "aoc/day10/models"
+import "aoc/d10/models"
 
 type RegisterCapturingAnalyser interface {
 	Initialise()

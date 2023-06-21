@@ -2,11 +2,10 @@ package solver
 
 import (
 	m "aoc/d12/models"
-	e "aoc/envelope"
 )
 
-func CalculateDistance(distance_picker DistancePicker) func(e.Envelope[m.Terrain]) (int, error) {
-	return func(envelope e.Envelope[m.Terrain]) (int, error) {
-		return distance_picker.getDistance(findAllDistancesFromGoalPosition(m.EnumerateTerrain(envelope.Get())))
+func CalculateDistance(distance_picker DistancePicker) func(m.SolverInput) (int, error) {
+	return func(input m.SolverInput) (int, error) {
+		return distance_picker.getDistance(findAllDistancesFromGoalPosition(m.EnumerateTerrain(input.Get())))
 	}
 }

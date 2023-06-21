@@ -1,7 +1,7 @@
 package solver
 
 import (
-	"aoc/day05/models"
+	"aoc/d05/models"
 )
 
 type crate_mover_9001 struct{}

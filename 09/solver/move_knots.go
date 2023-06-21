@@ -1,6 +1,6 @@
 package solver
 
-import m "aoc/day09/models"
+import m "aoc/d09/models"
 
 func move_knots(direction m.Direction, knots []m.Position) {
 	knots[0] = m.Move(knots[0], direction.AsMovement())

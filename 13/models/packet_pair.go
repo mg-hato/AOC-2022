@@ -1,8 +1,8 @@
 package models
 
-import "aoc/functional"
+import c "aoc/common"
 
-type PacketPair = functional.Pair[Packet, Packet]
+type PacketPair = c.Pair[Packet, Packet]
 
 func PacketPairEqualityFunction(lhs, rhs PacketPair) bool {
 	return PacketEqualityFunction(lhs.First, rhs.First) && PacketEqualityFunction(lhs.Second, rhs.Second)

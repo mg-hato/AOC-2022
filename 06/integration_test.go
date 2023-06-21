@@ -1,8 +1,8 @@
 package main
 
 import (
-	"aoc/day06/reader"
-	"aoc/day06/solver"
+	"aoc/d06/reader"
+	"aoc/d06/solver"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"

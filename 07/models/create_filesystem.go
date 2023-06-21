@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 )
 
 func CreateFilesystem(commands []Command) (*Directory, error) {
@@ -28,11 +28,11 @@ func verify_filesystem(root *Directory) error {
 		if current.items == nil {
 			return create_filesystem_verification_error(directory_is_unexplored_error(current.name))
 		}
-		subdirectories := f.Map(
+		subdirectories := c.Map(
 			func(item Item) *Directory { d, _ := item.(*Directory); return d },
-			f.Filter(
+			c.Filter(
 				func(item Item) bool { _, ok := item.(*Directory); return ok },
-				f.GetValues(current.items),
+				c.GetValues(current.items),
 			),
 		)
 		queue = append(queue, subdirectories...)

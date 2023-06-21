@@ -1,9 +1,8 @@
 package reader
 
 import (
+	c "aoc/common"
 	m "aoc/d13/models"
-	e "aoc/envelope"
-	f "aoc/functional"
 	"aoc/reading"
 	"regexp"
 )
@@ -22,7 +21,7 @@ type packet_reader struct {
 	packet_pairs []m.PacketPair
 }
 
-func PacketReader() reading.ReaderAoC2022[e.Envelope[[]m.PacketPair]] {
+func PacketReader() reading.ReaderAoC2022[m.SolverInput] {
 	packet_reader := &packet_reader{
 		current_status: first_packet,
 
@@ -48,7 +47,7 @@ func (pr packet_reader) PerformFinalValidation() error {
 		return second_packet_missing_final_validation_error()
 	}
 
-	flattened_packets := f.FlatMap(
+	flattened_packets := c.FlatMap(
 		func(packet_pair m.PacketPair) []m.Packet {
 			return []m.Packet{packet_pair.First, packet_pair.Second}
 		},
@@ -59,7 +58,7 @@ func (pr packet_reader) PerformFinalValidation() error {
 		m.PacketList(m.PacketList(m.PacketNumber(2))),
 		m.PacketList(m.PacketList(m.PacketNumber(6))),
 	} {
-		if index_match := f.IndexOf(
+		if index_match := c.IndexOf(
 			flattened_packets,
 			func(packet m.Packet) bool { return m.PacketEqualityFunction(divider_packet, packet) },
 		); index_match != -1 {
@@ -78,7 +77,7 @@ func (pr *packet_reader) ProvideLine(line string) {
 	pr.line_readers[pr.current_status](line)
 }
 
-func (pr packet_reader) FinishAndGetInputData() e.Envelope[[]m.PacketPair] {
+func (pr packet_reader) FinishAndGetInputData() m.SolverInput {
 	return m.PacketPairsEnvelope(pr.packet_pairs...)
 }
 

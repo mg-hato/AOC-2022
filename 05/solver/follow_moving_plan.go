@@ -1,15 +1,14 @@
 package solver
 
 import (
-	m "aoc/day05/models"
-	"aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d05/models"
 	"strings"
 )
 
-func FollowMovingPlanWith(crate_mover CrateMover) func(envelope.Envelope[m.MovingPlan]) (string, error) {
-	return func(env envelope.Envelope[m.MovingPlan]) (string, error) {
-		moving_plan := env.Get()
+func FollowMovingPlanWith(crate_mover CrateMover) func(m.SolverInput) (string, error) {
+	return func(input m.SolverInput) (string, error) {
+		moving_plan := input.Get()
 		stacks := moving_plan.StartingContainers
 
 		// Execute all the move instructions in order
@@ -20,12 +19,12 @@ func FollowMovingPlanWith(crate_mover CrateMover) func(envelope.Envelope[m.Movin
 		}
 
 		// Once finished, ensure that each stack is non-empty
-		if f.Any(func(stack m.Containers) bool { return len(stack) == 0 }, stacks) {
+		if c.Any(func(stack m.Containers) bool { return len(stack) == 0 }, stacks) {
 			return "", empty_stacks_error(stacks)
 		}
 
 		// All ok, return result
-		top_containers := strings.Join(f.Map(
+		top_containers := strings.Join(c.Map(
 			func(stack m.Containers) string { return stack[len(stack)-1:] },
 			stacks,
 		), "")

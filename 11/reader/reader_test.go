@@ -1,8 +1,7 @@
 package reader
 
 import (
-	m "aoc/day11/models"
-	e "aoc/envelope"
+	m "aoc/d11/models"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
@@ -67,32 +66,32 @@ func TestD11_ReaderTest(t *testing.T) {
 			},
 		}))).
 		AddTestCase(
-			"./test/bad-input.1", ts.ExpectError[e.Envelope[[]m.Monkey]](
+			"./test/bad-input.1", ts.ExpectError[m.SolverInput](
 				"div", "0",
 			),
 		).
 		AddTestCase(
-			"./test/bad-input.2", ts.ExpectError[e.Envelope[[]m.Monkey]](
+			"./test/bad-input.2", ts.ExpectError[m.SolverInput](
 				"self-loop",
 			),
 		).
 		AddTestCase(
-			"./test/bad-input.3", ts.ExpectError[e.Envelope[[]m.Monkey]](
+			"./test/bad-input.3", ts.ExpectError[m.SolverInput](
 				"outside", "expected", "range", "[0",
 			),
 		).
 		AddTestCase(
-			"./test/bad-input.4", ts.ExpectError[e.Envelope[[]m.Monkey]](
+			"./test/bad-input.4", ts.ExpectError[m.SolverInput](
 				"outside", "expected", "range", "[0",
 			),
 		).
 		AddTestCase(
-			"./test/bad-input.5", ts.ExpectError[e.Envelope[[]m.Monkey]](
+			"./test/bad-input.5", ts.ExpectError[m.SolverInput](
 				"not", "incrementing", "order",
 			),
 		).
 		AddTestCase(
-			"./test/bad-input.6", ts.ExpectError[e.Envelope[[]m.Monkey]](
+			"./test/bad-input.6", ts.ExpectError[m.SolverInput](
 				"at least 2",
 			),
 		).

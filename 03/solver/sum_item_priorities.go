@@ -1,14 +1,13 @@
 package solver
 
 import (
-	m "aoc/day03/models"
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d03/models"
 )
 
-func SumItemPriorities(locator ItemLocator) func(e.Envelope[[]m.Rucksack]) (int, error) {
-	return func(envelope e.Envelope[[]m.Rucksack]) (int, error) {
-		items, err := locator.locateItems(envelope.Get())
-		return f.Sum(f.Map(get_item_priority, items)), err
+func SumItemPriorities(locator ItemLocator) func(m.SolverInput) (int, error) {
+	return func(input m.SolverInput) (int, error) {
+		items, err := locator.locateItems(input.Get())
+		return c.Sum(c.Map(get_item_priority, items)), err
 	}
 }

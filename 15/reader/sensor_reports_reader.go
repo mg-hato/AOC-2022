@@ -1,9 +1,8 @@
 package reader
 
 import (
+	c "aoc/common"
 	m "aoc/d15/models"
-	e "aoc/envelope"
-	"aoc/functional"
 	"aoc/reading"
 	"regexp"
 	"strconv"
@@ -20,7 +19,7 @@ type sensor_reports_reader struct {
 	reports []m.SensorReport
 }
 
-func SensorReportsReader() reading.ReaderAoC2022[e.Envelope[[]m.SensorReport]] {
+func SensorReportsReader() reading.ReaderAoC2022[m.SolverInput] {
 	return &sensor_reports_reader{
 		empty_re:  regexp.MustCompile(`^ *$`),
 		report_re: regexp.MustCompile(`^ *Sensor at x=(-?\d+), *y=(-?\d+) *: *closest beacon is at x=(-?\d+), *y=(-?\d+) *$`),
@@ -54,7 +53,7 @@ func (srr *sensor_reports_reader) ProvideLine(line string) {
 	switch {
 	case srr.empty_re.MatchString(line):
 	case srr.report_re.MatchString(line):
-		numbers := functional.Map(
+		numbers := c.Map(
 			func(s string) int { i, _ := strconv.Atoi(s); return i },
 			srr.report_re.FindStringSubmatch(line)[1:],
 		)
@@ -68,6 +67,6 @@ func (srr *sensor_reports_reader) ProvideLine(line string) {
 	}
 }
 
-func (srr sensor_reports_reader) FinishAndGetInputData() e.Envelope[[]m.SensorReport] {
+func (srr sensor_reports_reader) FinishAndGetInputData() m.SolverInput {
 	return m.SensorReportsEnvelope(srr.reports...)
 }

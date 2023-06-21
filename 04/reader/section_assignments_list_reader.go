@@ -1,9 +1,8 @@
 package reader
 
 import (
-	m "aoc/day04/models"
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d04/models"
 	"aoc/reading"
 	"fmt"
 	"regexp"
@@ -21,7 +20,7 @@ type section_assignments_list_reader struct {
 }
 
 // Constructor function for section assignments list reader
-func SectionAssignmentsListReader() reading.ReaderAoC2022[e.Envelope[[]m.SectionAssignmentPair]] {
+func SectionAssignmentsListReader() reading.ReaderAoC2022[m.SolverInput] {
 	return &section_assignments_list_reader{
 		err: nil,
 
@@ -55,7 +54,7 @@ func (salr *section_assignments_list_reader) ProvideLine(line string) {
 	}
 
 	// Make assignment pair
-	values := f.Map(func(s string) int { i, _ := strconv.Atoi(s); return i }, matches[1:])
+	values := c.Map(func(s string) int { i, _ := strconv.Atoi(s); return i }, matches[1:])
 	assignment := m.MakeSAP(values[0], values[1], values[2], values[3])
 
 	// Ensure assignment pair is valid i.e. each elf's coverage is the correct way around
@@ -71,6 +70,6 @@ func (salr *section_assignments_list_reader) ProvideLine(line string) {
 	salr.assignments = append(salr.assignments, assignment)
 }
 
-func (salr section_assignments_list_reader) FinishAndGetInputData() e.Envelope[[]m.SectionAssignmentPair] {
+func (salr section_assignments_list_reader) FinishAndGetInputData() m.SolverInput {
 	return m.CreateSectionAssignmentPairsEnvelope(salr.assignments)
 }

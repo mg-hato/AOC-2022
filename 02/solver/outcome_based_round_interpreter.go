@@ -1,6 +1,6 @@
 package solver
 
-import m "aoc/day02/models"
+import m "aoc/d02/models"
 
 type outcome_based_round_interpreter struct{}
 

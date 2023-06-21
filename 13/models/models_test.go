@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	ts "aoc/testers"
 	"testing"
 )
@@ -23,7 +23,7 @@ func TestD13_EnvelopeTest(t *testing.T) {
 	packets := envelope.Get()
 	packets[0].First = PacketList(PacketNumber(0))
 
-	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), f.ArrayEqualWith(PacketPairEqualityFunction))
+	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), c.ArrayEqualWith(PacketPairEqualityFunction))
 }
 
 func TestD13_PacketComparison(t *testing.T) {

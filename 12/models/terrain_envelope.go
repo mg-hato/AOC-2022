@@ -1,8 +1,7 @@
 package models
 
 import (
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
 )
 
 type terrain_envelope struct {
@@ -10,13 +9,13 @@ type terrain_envelope struct {
 }
 
 func (te terrain_envelope) Get() Terrain {
-	return f.Map(f.Identity[string], te.terrain)
+	return c.Map(c.Identity[string], te.terrain)
 }
 
-func TerrainEnvelope(terrain ...string) e.Envelope[Terrain] {
+func TerrainEnvelope(terrain ...string) c.Envelope[Terrain] {
 	return terrain_envelope{terrain}
 }
 
-func TerrainEnvelopeEqualityFunction(lhs, rhs e.Envelope[Terrain]) bool {
-	return f.ArrayEqual(lhs.Get(), rhs.Get())
+func TerrainEnvelopeEqualityFunction(lhs, rhs c.Envelope[Terrain]) bool {
+	return c.ArrayEqual(lhs.Get(), rhs.Get())
 }

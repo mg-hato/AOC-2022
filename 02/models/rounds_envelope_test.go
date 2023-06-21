@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	ts "aoc/testers"
 	"testing"
 )
@@ -14,5 +14,5 @@ func TestD02_RoundsEnvelope(t *testing.T) {
 	rounds1[0].Left = C
 
 	// Check that subsequent Get() is unaffected by the change
-	ts.AssertEqualWithEqFunc(t, env.Get(), []Round{{A, X}, {B, Y}, {C, Z}}, f.ArrayEqual[Round])
+	ts.AssertEqualWithEqFunc(t, env.Get(), []Round{{A, X}, {B, Y}, {C, Z}}, c.ArrayEqual[Round])
 }

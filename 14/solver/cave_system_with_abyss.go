@@ -1,8 +1,8 @@
 package solver
 
 import (
+	c "aoc/common"
 	m "aoc/d14/models"
-	f "aoc/functional"
 	"sort"
 )
 
@@ -24,9 +24,9 @@ func caveSystemWithAbyss(rock_structures []m.RockStructure, sand_source m.Point)
 	}
 
 	// Group rocks into "rock-sand pillars" per column (First axis)
-	cs.pillars = f.GroupBy(
+	cs.pillars = c.GroupBy(
 		m.GetRockPoints(rock_structures),
-		f.GetFirst[int, int],
+		c.GetFirst[int, int],
 		func(rock_position m.Point) m.Pillar {
 			return m.MakePillar(rock_position.Second)
 		},

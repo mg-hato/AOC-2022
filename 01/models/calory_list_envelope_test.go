@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	ts "aoc/testers"
 	"testing"
 )
@@ -14,5 +14,5 @@ func TestD01_CaloryListEnvelope(t *testing.T) {
 	calory_list1[0][1] = 7
 
 	// Ensure that data received through another Get call is unaffected by the change
-	ts.AssertEqualWithEqFunc(t, envelope.Get(), [][]int{{1, 2, 3}, {45}, {100, 5, 6}}, f.ArrayEqualWith(f.ArrayEqual[int]))
+	ts.AssertEqualWithEqFunc(t, envelope.Get(), [][]int{{1, 2, 3}, {45}, {100, 5, 6}}, c.ArrayEqualWith(c.ArrayEqual[int]))
 }

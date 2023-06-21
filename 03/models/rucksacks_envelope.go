@@ -1,8 +1,7 @@
 package models
 
 import (
-	e "aoc/envelope"
-	"aoc/functional"
+	c "aoc/common"
 	"fmt"
 	"strings"
 )
@@ -17,7 +16,7 @@ func (be RucksacksEnvelope) Get() []Rucksack {
 	return new_rucksacks
 }
 
-func CreateRucksacksEnvelope(rucksacks []Rucksack) e.Envelope[[]Rucksack] {
+func CreateRucksacksEnvelope(rucksacks []Rucksack) c.Envelope[[]Rucksack] {
 	return &RucksacksEnvelope{rucksacks}
 }
 
@@ -25,6 +24,6 @@ func (be RucksacksEnvelope) String() string {
 	return fmt.Sprintf("[%s]", strings.Join(be.rucksacks, ", "))
 }
 
-func RucksacksEnvelopeEqualityFunction(lhs, rhs e.Envelope[[]Rucksack]) bool {
-	return functional.ArrayEqual(lhs.Get(), rhs.Get())
+func RucksacksEnvelopeEqualityFunction(lhs, rhs c.Envelope[[]Rucksack]) bool {
+	return c.ArrayEqual(lhs.Get(), rhs.Get())
 }

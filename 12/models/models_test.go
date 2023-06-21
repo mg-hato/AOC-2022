@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	ts "aoc/testers"
 	"testing"
 )
@@ -13,7 +13,7 @@ func TestD12_EnvelopeTest(t *testing.T) {
 	terrain := envelope.Get()
 	terrain[0] = "xbw"
 
-	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), f.ArrayEqual[string])
+	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), c.ArrayEqual[string])
 }
 
 func TestD12_GetNeighbours(t *testing.T) {
@@ -26,7 +26,7 @@ func TestD12_GetNeighbours(t *testing.T) {
 			{First: 10, Second: 21},
 			{First: 10, Second: 19},
 		},
-		f.ArrayEqualInAnyOrder[Position],
+		c.ArrayEqualInAnyOrder[Position],
 	)
 }
 
@@ -39,7 +39,7 @@ func TestD12_EnumerateTerrain(t *testing.T) {
 			{{Position{First: 1, Second: 0}, 'm'}, {Position{First: 1, Second: 1}, 'l'}},
 			{{Position{First: 2, Second: 0}, 's'}, {Position{First: 2, Second: 1}, 'E'}},
 		},
-		f.ArrayEqualWith(f.ArrayEqual[Field]),
+		c.ArrayEqualWith(c.ArrayEqual[Field]),
 	)
 }
 

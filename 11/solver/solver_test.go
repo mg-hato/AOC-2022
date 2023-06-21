@@ -1,15 +1,14 @@
 package solver
 
 import (
-	m "aoc/day11/models"
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d11/models"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD11_Solver(t *testing.T) {
-	ts.SolverTesterForComparableResults[e.Envelope[[]m.Monkey], int64](t).
+	ts.SolverTesterForComparableResults[m.SolverInput, int64](t).
 		ProvideSolver(CalculateMonkeyBusiness(20, DivBy3)).
 		ProvideSolver(CalculateMonkeyBusiness(10_000, NoAdjustment)).
 		AddTestCase(m.CreateMonkeysEnvelopeWith([]m.Monkey{
@@ -50,7 +49,7 @@ func TestD11_Solver(t *testing.T) {
 			{
 				// Monkey 0 receives everything at the end of the round
 				MonkeyId:     0, // 101 items per round: all
-				Items:        f.RangeInclusive(0, 100),
+				Items:        c.RangeInclusive(0, 100),
 				InspectionOP: m.IOP(m.Old(), m.Mult(), m.Num(3)),
 				DivTest:      2,
 				OnTrue:       1,

@@ -1,7 +1,7 @@
 package solver
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 )
 
 type WorryLevelAdjustmentStrategy int
@@ -17,7 +17,7 @@ func getAdjustmentFunction(
 ) func(int) int {
 	// Modulo to prevent worry level going into overflow
 	// This modulo maintains the outcomes of divisibility tests
-	modulo := f.Foldl(lcm, divisibility_test_numbers, 1)
+	modulo := c.Foldl(lcm, divisibility_test_numbers, 1)
 
 	switch strategy {
 	case DivBy3:

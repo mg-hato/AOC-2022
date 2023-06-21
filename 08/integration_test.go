@@ -1,18 +1,16 @@
 package main
 
 import (
-	"aoc/day08/models"
-	"aoc/day08/reader"
-	"aoc/day08/solver"
-	"aoc/envelope"
+	m "aoc/d08/models"
+	"aoc/d08/reader"
+	"aoc/d08/solver"
 	"aoc/reading"
 	ts "aoc/testers"
 	"testing"
 )
 
 func TestD08_IntegrationTest(t *testing.T) {
-	type Data = envelope.Envelope[models.Forest]
-	ts.IntegrationTesterForComparableResults[Data, int](t).
+	ts.IntegrationTesterForComparableResults[m.SolverInput, int](t).
 		ProvideReader(reading.ReadWith(reader.ForestReader)).
 		ProvideSolver(solver.AnalyseForest(solver.VisibilityTreeLineAnalyser)).
 		ProvideSolver(solver.AnalyseForest(solver.ScenicScoreTreeLineAnalyser)).

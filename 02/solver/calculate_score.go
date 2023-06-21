@@ -1,14 +1,12 @@
 package solver
 
 import (
-	m "aoc/day02/models"
-	e "aoc/envelope"
-
-	f "aoc/functional"
+	c "aoc/common"
+	m "aoc/d02/models"
 )
 
-func CalculateScore(ri RoundInterpreter) func(e.Envelope[[]m.Round]) (int, error) {
-	return func(envelope e.Envelope[[]m.Round]) (int, error) {
-		return f.Sum(f.Map(ri.GetScore, envelope.Get())), nil
+func CalculateScore(ri RoundInterpreter) func(m.SolverInput) (int, error) {
+	return func(input m.SolverInput) (int, error) {
+		return c.Sum(c.Map(ri.GetScore, input.Get())), nil
 	}
 }

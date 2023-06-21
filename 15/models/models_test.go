@@ -1,7 +1,7 @@
 package models
 
 import (
-	f "aoc/functional"
+	c "aoc/common"
 	ts "aoc/testers"
 	"testing"
 )
@@ -26,5 +26,5 @@ func TestD15_Envelope(t *testing.T) {
 	mutable_reports[0].Sensor.First = 12
 	mutable_reports[2] = SensorReport{}
 
-	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), f.ArrayEqual[SensorReport])
+	ts.AssertEqualWithEqFunc(t, envelope.Get(), data(), c.ArrayEqual[SensorReport])
 }

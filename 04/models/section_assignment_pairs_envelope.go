@@ -1,8 +1,7 @@
 package models
 
 import (
-	e "aoc/envelope"
-	f "aoc/functional"
+	c "aoc/common"
 	"fmt"
 	"strings"
 )
@@ -11,7 +10,7 @@ type SectionAssignmentPairsEnvelope struct {
 	assignment_pairs []SectionAssignmentPair
 }
 
-func CreateSectionAssignmentPairsEnvelope(pairs []SectionAssignmentPair) e.Envelope[[]SectionAssignmentPair] {
+func CreateSectionAssignmentPairsEnvelope(pairs []SectionAssignmentPair) c.Envelope[[]SectionAssignmentPair] {
 	return &SectionAssignmentPairsEnvelope{pairs}
 }
 
@@ -25,11 +24,11 @@ func (env SectionAssignmentPairsEnvelope) String() string {
 	return fmt.Sprintf(
 		"SAP-Envelope[%s]",
 		strings.Join(
-			f.Map(func(sap SectionAssignmentPair) string { return fmt.Sprint(sap) }, env.assignment_pairs),
+			c.Map(func(sap SectionAssignmentPair) string { return fmt.Sprint(sap) }, env.assignment_pairs),
 			", ",
 		))
 }
 
-func SectionAssignmentPairsEnvelopeEqualityFunction(lhs, rhs e.Envelope[[]SectionAssignmentPair]) bool {
-	return f.ArrayEqual(lhs.Get(), rhs.Get())
+func SectionAssignmentPairsEnvelopeEqualityFunction(lhs, rhs c.Envelope[[]SectionAssignmentPair]) bool {
+	return c.ArrayEqual(lhs.Get(), rhs.Get())
 }

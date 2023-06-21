@@ -1,7 +1,7 @@
 package models
 
 import (
-	"aoc/functional"
+	c "aoc/common"
 	"aoc/testers"
 	"testing"
 )
@@ -11,5 +11,5 @@ func TestD03_RucksacksEnvelope(t *testing.T) {
 	rucksacks := envelope.Get()
 	rucksacks[0] = "tBtw"
 
-	testers.AssertEqualWithEqFunc(t, envelope.Get(), []Rucksack{"abcABc", "xAzXxZ", "PQRSSpqA"}, functional.ArrayEqual[string])
+	testers.AssertEqualWithEqFunc(t, envelope.Get(), []Rucksack{"abcABc", "xAzXxZ", "PQRSSpqA"}, c.ArrayEqual[string])
 }

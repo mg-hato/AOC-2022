@@ -1,6 +1,6 @@
 package models
 
-import f "aoc/functional"
+import c "aoc/common"
 
 // Pillar represents the combination of rock-solid base that can have
 // a number of sand blocks on top of it
@@ -26,5 +26,5 @@ func (p Pillar) GetTop() int {
 }
 
 func (p Pillar) ContainsDepth(depth int) bool {
-	return f.InInclusiveRange(p.GetTop(), p.GetBase())(depth)
+	return c.InInclusiveRange(p.GetTop(), p.GetBase())(depth)
 }
