@@ -3,13 +3,11 @@ package solver
 import (
 	c "aoc/common"
 	m "aoc/d18/models"
-	"fmt"
 )
 
 func generate_water_droplets(lava_droplets map[m.Droplet]bool) map[m.Droplet]bool {
 	water_droplets := map[m.Droplet]bool{}
 	corners, in_range_func := encapsulating_cube_edges(c.GetKeys(lava_droplets))
-	fmt.Println(corners)
 	q := c.Queue[m.Droplet](corners...)
 	for !q.IsEmpty() {
 		water_droplet, _ := q.Dequeue()
