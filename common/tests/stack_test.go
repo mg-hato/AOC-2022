@@ -7,7 +7,7 @@ import (
 )
 
 func TestCommon_Stack(t *testing.T) {
-	stack := common.Stack[int](1, 2, 3)
+	stack := common.MakeStack[int](1, 2, 3)
 	ts.AssertEqual(t, stack.Size(), 3)
 
 	stack.Push(4)
