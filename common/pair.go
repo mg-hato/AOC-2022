@@ -13,6 +13,10 @@ func GetSecond[A, B any](pair Pair[A, B]) B {
 	return pair.Second
 }
 
+func (pair Pair[A, B]) Get() (A, B) {
+	return pair.First, pair.Second
+}
+
 func MakePair[A, B any](first A, second B) Pair[A, B] {
 	return Pair[A, B]{
 		First:  first,

@@ -2,22 +2,22 @@ package common
 
 import "errors"
 
-type stack[T any] struct {
+type Stack[T any] struct {
 	stack_arr []T
 }
 
-func Stack[T any](elements ...T) *stack[T] {
-	return &stack[T]{ShallowCopy(elements)}
+func MakeStack[T any](elements ...T) *Stack[T] {
+	return &Stack[T]{ShallowCopy(elements)}
 }
 
 // Pushes elements on top of the stack
-func (s *stack[T]) Push(element T, elements ...T) {
+func (s *Stack[T]) Push(element T, elements ...T) {
 	s.stack_arr = append(s.stack_arr, element)
 	s.stack_arr = append(s.stack_arr, elements...)
 }
 
 // Pops an element from the top of the stack if there is one, otherwise returns an error
-func (s *stack[T]) Pop() (T, error) {
+func (s *Stack[T]) Pop() (T, error) {
 	if s.IsEmpty() {
 		return GetZero[T](), stack_empty_error()
 	} else {
@@ -27,16 +27,16 @@ func (s *stack[T]) Pop() (T, error) {
 	}
 }
 
-func (s *stack[T]) Size() int {
+func (s *Stack[T]) Size() int {
 	return len(s.stack_arr)
 }
 
-func (s *stack[T]) IsEmpty() bool {
+func (s *Stack[T]) IsEmpty() bool {
 	return s.Size() == 0
 }
 
 // Returns element on the top of the stack
-func (s *stack[T]) Top() (T, error) {
+func (s *Stack[T]) Top() (T, error) {
 	if s.IsEmpty() {
 		return GetZero[T](), stack_empty_error()
 	} else {
@@ -45,7 +45,7 @@ func (s *stack[T]) Top() (T, error) {
 }
 
 // Returns stack elements from top to bottom
-func (s *stack[T]) GetAsArray() []T {
+func (s *Stack[T]) GetAsArray() []T {
 	return Reverse(s.stack_arr)
 }
 
