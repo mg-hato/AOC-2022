@@ -1,0 +1,6 @@
+root: abc - humn
+
+abc: ghijk * def
+def: 255
+ghijk : humn + def
+humn : 101
